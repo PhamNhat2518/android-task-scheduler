@@ -1,74 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white"
-    android:gravity="center_horizontal"
-    android:padding="24dp">
+    tools:context=".MainActivity">
 
-    <!-- Ảnh robot -->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageRobot"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:src="@drawable/robot"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center_horizontal"/>
-
-    <!-- Khung chào hỏi -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_box"
-        android:padding="16dp"
-        android:orientation="vertical"
-        android:elevation="4dp">
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textHello"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Xin chào!"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal" />
-
-        <TextView
-            android:id="@+id/textIntro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tôi là ứng dụng lập lịch tôi sẽ đồng hành cùng bạn trên con đường phát triển bản thân."
-            android:textSize="14sp"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="4dp"/>
-    </LinearLayout>
-
-    <!-- EditText nhập tên -->
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/edittext_bg"
-        android:hint="Bạn tên là gì?"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:textColorHint="#888888"
-        android:inputType="textPersonName"/>
-
-    <!-- Nút tiếp tục -->
-    <Button
-        android:id="@+id/btnContinue"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:text="Tiếp tục"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:background="@drawable/button_bg"
-        android:textSize="18sp"/>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
