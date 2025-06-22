@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Phần tiêu đề ngày (nền xám) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundLightGrey"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDayOfWeek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Thứ 2"
+            android:textColor="@color/colorTextDarkGrey"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 tháng 6"
+            android:textColor="@color/colorTextDarkGrey"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <!-- Phần nội dung công việc (nền trắng) -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp">
+
+        <TextView
+            android:id="@+id/tvTaskDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="Không có công việc nào"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/ivAddTask"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_add_purple"
+            android:contentDescription="Thêm công việc"/>
+        <!-- Lưu ý: cần có file ic_add_purple.xml -->
+    </RelativeLayout>
+</LinearLayout>

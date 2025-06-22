@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Thêm các màu này -->
+    <color name="colorPrimary">#4F00FF</color> <!-- Màu xanh/tím chính -->
+    <color name="colorBackgroundLightGrey">#F0F0F0</color>
+    <color name="colorTextDarkGrey">#424242</color>
 </resources>

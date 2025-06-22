@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@drawable/ic_calendar_today_24"
+        android:title="Lịch" />
+    <item
+        android:id="@+id/navigation_tasks"
+        android:icon="@drawable/ic_checklist_24"
+        android:title="Công việc" />
+</menu>
