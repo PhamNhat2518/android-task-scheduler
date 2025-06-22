@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context=".MainActivity">
+
+    <!-- Phần Tiêu đề -->
+    <TextView
+        style="@style/SectionTitle"
+        android:text="Tiêu đề" />
+
+    <!-- Phần Ngày trong tuần -->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/grey_rounded_background"
+        android:hint="Lịch trình"
+        android:inputType="text"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp"
+        android:textColorHint="#555555"
+        android:textSize="18sp" />
+
+    <TextView
+        style="@style/SectionTitle"
+        android:layout_marginTop="32dp"
+        android:text="Ngày trong tuần" />
+
+    <!-- Thanh chọn ngày -->
+
+    <!-- Khoảng trống đẩy nút xuống dưới -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="107dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/grey_rounded_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <!-- Các ngày chưa chọn (Trang trí) -->
+        <TextView
+            style="@style/DayOfWeek.Unselected"
+            android:text="Th2" />
+
+        <TextView
+            style="@style/DayOfWeek.Unselected"
+            android:text="Th3" />
+
+        <TextView
+            style="@style/DayOfWeek.Unselected"
+            android:text="Th4" />
+
+        <TextView
+            style="@style/DayOfWeek.Unselected"
+            android:text="Th5" />
+
+        <TextView
+            style="@style/DayOfWeek.Unselected"
+            android:text="Th6" />
+
+        <!-- Khối các ngày đã chọn (Trang trí) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.2"
+            app:cardBackgroundColor="#4F00FF"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/DayOfWeek.Selected"
+                    android:text="Th7" />
+
+                <TextView
+                    style="@style/DayOfWeek.Selected"
+                    android:text="CN" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Nút Tiếp tục (Nhấn được) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="Tiếp tục"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="#4F00FF"
+        app:cornerRadius="16dp" />
+
+</LinearLayout>
