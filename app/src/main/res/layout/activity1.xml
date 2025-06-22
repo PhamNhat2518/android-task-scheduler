@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context=".MainActivity">
+
+    <!-- 1. Ảnh Robot (dùng CardView để bo tròn) -->
+    <!-- BẮT BUỘC: Bạn phải có tệp ảnh robot_avatar.png trong res/drawable -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="100dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Ảnh đại diện robot"
+            android:scaleType="centerCrop"
+            android:src="@drawable/robot_avatar" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- 2. Khung chào mừng (Dùng MaterialCardView để không cần tệp shape) -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#BDBDBD"
+        app:strokeWidth="1.5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Xin chào!"
+                android:textColor="@android:color/black"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Tôi là ứng dụng lập lịch tôi sẽ đồng hành cùng bạn trên con đường phát triển bản thân."
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- 3. Ô nhập tên -->
+    <!-- BẮT BUỘC: Ô EditText vẫn cần 1 tệp shape riêng để có nền xám bo tròn -->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/edittext_background_shape"
+        android:hint="Bạn tên là gì?"
+        android:inputType="textPersonName"
+        android:padding="16dp"
+        android:textSize="16sp" />
+
+
+    <!-- 4. Nút Tiếp tục (Dùng MaterialButton để không cần tệp shape) -->
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="Tiếp tục"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="#4F00FF"
+        app:cornerRadius="16dp"
+        app:elevation="0dp"/>
+
+</LinearLayout>
