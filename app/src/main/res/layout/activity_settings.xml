@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="20dp"
+    tools:context=".SettingsActivity">
+
+    <!-- 1. Thanh tiêu đề tùy chỉnh -->
+    <TextView
+        android:id="@+id/tvDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Xong"
+        android:textColor="#007AFF"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cài đặt"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 2. Nhóm các lựa chọn cài đặt -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/settingsGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
+
+            <!-- Lựa chọn: Lưu trữ -->
+            <RelativeLayout style="@style/SettingsRowLayout">
+                <TextView
+                    style="@style/SettingsRowText"
+                    android:text="Lưu trữ" />
+                <ImageView
+                    style="@style/SettingsRowIcon"
+                    android:src="@drawable/ic_arrow_forward_ios"
+                    android:contentDescription="Lưu trữ"/>
+            </RelativeLayout>
+
+            <!-- Đường kẻ ngang -->
+            <View style="@style/SettingsDivider" />
+
+            <!-- Lựa chọn: Nhận lịch trình -->
+            <RelativeLayout style="@style/SettingsRowLayout">
+                <TextView
+                    style="@style/SettingsRowText"
+                    android:text="Nhận lịch trình từ bạn bè" />
+                <ImageView
+                    style="@style/SettingsRowIcon"
+                    android:src="@drawable/ic_download"
+                    android:contentDescription="Nhận lịch trình"/>
+            </RelativeLayout>
+
+            <!-- Đường kẻ ngang -->
+            <View style="@style/SettingsDivider" />
+
+            <!-- Lựa chọn: Chia sẻ lịch trình -->
+            <RelativeLayout style="@style/SettingsRowLayout">
+                <TextView
+                    style="@style/SettingsRowText"
+                    android:text="Chia sẻ lịch trình với bạn bè" />
+                <ImageView
+                    style="@style/SettingsRowIcon"
+                    android:src="@drawable/ic_open_in_new"
+                    android:contentDescription="Chia sẻ lịch trình"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- 3. Nút Đăng nhập -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:paddingVertical="14dp"
+        android:text="Đăng nhập"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="#4F00FF"
+        app:cornerRadius="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,4 +51,35 @@
     <style name="DayOfWeek.Selected" parent="DayOfWeek">
         <item name="android:textColor">@android:color/white</item>
     </style>
+    <style name="SettingsRowLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingVertical">16dp</item>
+    </style>
+
+    <!-- Style cho chữ trong mỗi hàng -->
+    <style name="SettingsRowText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_centerVertical">true</item>z
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Style cho icon trong mỗi hàng -->
+    <style name="SettingsRowIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="app:tint">#BDBDBD</item> <!-- Màu xám cho icon -->
+    </style>
+
+    <!-- Style cho đường kẻ ngăn cách -->
+    <style name="SettingsDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#E0E0E0</item> <!-- Màu xám rất nhạt -->
+    </style>
 </resources>
