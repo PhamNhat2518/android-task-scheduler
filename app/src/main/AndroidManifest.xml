@@ -26,6 +26,9 @@
         <activity android:name=".controller.Activity2" android:exported="false"/>
         <activity android:name=".controller.Activity3" android:exported="false"/>
         <activity android:name=".controller.MainActivity" android:exported="false"/>
+        <activity
+            android:name=".controller.SettingsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

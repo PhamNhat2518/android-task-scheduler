@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 
 import vn.edu.tlu.appquanlylichtrinh.R;
+import vn.edu.tlu.appquanlylichtrinh.controller.MainActivity;
 
 public class Activity3 extends AppCompatActivity {
 

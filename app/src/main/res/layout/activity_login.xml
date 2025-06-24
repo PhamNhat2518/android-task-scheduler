@@ -7,13 +7,18 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="24dp"
-    tools:context=".LoginActivity">
+    tools:context=".controller.LoginActivity">
 
     <!-- 1. Nút Hủy bỏ -->
+
+    <!-- 2. Khung đăng nhập chính -->
+
     <TextView
         android:id="@+id/tvCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
         android:text="Hủy bỏ"
         android:textColor="#007AFF"
         android:textSize="18sp"
@@ -21,7 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 2. Khung đăng nhập chính -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

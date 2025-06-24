@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="20dp"
-    tools:context=".SettingsActivity">
+    tools:context=".controller.SettingsActivity">
 
     <!-- 1. Thanh tiêu đề tùy chỉnh -->
     <TextView

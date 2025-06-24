@@ -2,6 +2,21 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.AppQuanLyLichTrinh" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <!-- Màu chính của ứng dụng (dùng cho Toolbar, Button...) -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Màu nền của các thành phần có màu chính (thường là màu chữ) -->
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- (Tùy chọn) Màu phụ -->
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <!-- Màu của thanh trạng thái (status bar) -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
+
+    <!-- Dòng này có thể không cần thiết nếu Base.Theme đã đủ -->
+    <style name="Theme.AppQuanLyLichTrinh" parent="Base.Theme.AppQuanLyLichTrinh" />
 </resources>
