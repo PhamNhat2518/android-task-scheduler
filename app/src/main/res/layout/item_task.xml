@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Nhãn giờ -->
+            <TextView
+                android:id="@+id/tvTaskTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grey_rounded_background"
+                android:backgroundTint="#F0F0F0"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                tools:text="08:00" />
+
+            <!-- Tiêu đề chính - ĐÃ THÊM LẠI VIEW NÀY -->
+            <TextView
+                android:id="@+id/tvTaskTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                tools:text="Học Android" />
+
+            <!-- CheckBox cho công việc phụ -->
+            <CheckBox
+                android:id="@+id/cbSubtask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                tools:text="Học figma" />
+
+            <!-- TextView tvSubtask thừa đã bị xóa -->
+
+        </LinearLayout>
+
+        <!-- CheckBox chính -->
+        <CheckBox
+            android:id="@+id/cbTaskCompleted"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="16dp"
+            android:button="@drawable/task_checkbox_background" />
+    </LinearLayout>
+
+    <!-- Đường kẻ ngăn cách -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:background="#F0F0F0" />
+</LinearLayout>

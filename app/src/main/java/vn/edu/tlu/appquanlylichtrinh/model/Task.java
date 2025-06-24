@@ -10,6 +10,16 @@ public class Task {
     private String userId; // Để biết tác vụ này của ai
     private boolean isCompleted;
 
+    public boolean isSubtaskCompleted() {
+        return subtaskCompleted;
+    }
+
+    public void setSubtaskCompleted(boolean subtaskCompleted) {
+        this.subtaskCompleted = subtaskCompleted;
+    }
+
+    private boolean subtaskCompleted;
+
     // Constructor rỗng là BẮT BUỘC cho Firebase
     public Task() {
     }

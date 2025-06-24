@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp"
+    android:gravity="center_vertical">
+
+    <!-- Khối bên trái: Giờ và Tiêu đề -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Nhãn giờ -->
+        <TextView
+            android:id="@+id/tvTaskTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/grey_rounded_background"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:text="08:00"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:backgroundTint="#F0F0F0"/>
+
+        <!-- Tiêu đề chính -->
+        <TextView
+            android:id="@+id/tvTaskTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Học Android"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <!-- (Tùy chọn) Công việc phụ. Ta sẽ xử lý ẩn/hiện nó trong code -->
+        <TextView
+            android:id="@+id/tvSubtask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Học figma"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Khối bên phải: CheckBox tùy chỉnh -->
+    <CheckBox
+        android:id="@+id/cbTaskCompleted"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:button="@drawable/task_checkbox_background" />
+
+</LinearLayout>

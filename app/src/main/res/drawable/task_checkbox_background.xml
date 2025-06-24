@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Trạng thái khi được check (hoàn thành) -->
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- Lớp 1: Vòng tròn nền màu chính -->
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@color/colorPrimary"/>
+                    <size android:width="28dp" android:height="28dp"/>
+                </shape>
+            </item>
+
+            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa - ĐÃ THÊM KÍCH THƯỚC -->
+            <item
+                android:drawable="@drawable/ic_check_white_24"
+                android:gravity="center"
+                android:width="24dp"
+                android:height="24dp" />
+
+        </layer-list>
+    </item>
+
+    <!-- Trạng thái mặc định (chưa hoàn thành) -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:width="1.5dp" android:color="#BDBDBD"/>
+            <size android:width="28dp" android:height="28dp"/>
+        </shape>
+    </item>
+</selector>
