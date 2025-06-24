@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <!-- Style cho ô số/chữ màu xanh -->
     <style name="WeekNumberBox">
@@ -23,6 +22,7 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">15sp</item>
     </style>
+
     <style name="SectionTitle" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -51,6 +51,7 @@
     <style name="DayOfWeek.Selected" parent="DayOfWeek">
         <item name="android:textColor">@android:color/white</item>
     </style>
+
     <style name="SettingsRowLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -62,7 +63,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentStart">true</item>
-        <item name="android:layout_centerVertical">true</item>z
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">16sp</item>
     </style>
@@ -73,15 +74,16 @@
         <item name="android:layout_height">24dp</item>
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="app:tint">#BDBDBD</item> <!-- Màu xám cho icon -->
+        <item name="android:tint">#BDBDBD</item> <!-- ĐÃ SỬA -->
     </style>
 
-    <!-- Style cho đường kẻ ngăn cách -->
+    <!-- Style cho đường kẻ ngăn cách - DÙNG CHUNG -->
     <style name="SettingsDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#E0E0E0</item> <!-- Màu xám rất nhạt -->
     </style>
+
     <!-- Style cho mỗi hàng trong nhóm cài đặt tác vụ -->
     <style name="TaskRowLayout">
         <item name="android:layout_width">match_parent</item>
@@ -109,10 +111,6 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <!-- Style cho đường kẻ ngăn cách -->
-    <style name="TaskDivider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#E0E0E0</item> <!-- Màu xám rất nhạt -->
-    </style>
+    <!-- ĐÃ XÓA STYLE TASKDIVIDER BỊ TRÙNG LẶP -->
+
 </resources>

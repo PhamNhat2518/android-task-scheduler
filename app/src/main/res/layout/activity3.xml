@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     android:padding="24dp"
-    tools:context=".MainActivity">
+    tools:context=".controller.MainActivity">
 
     <!-- Phần Tiêu đề -->
     <TextView

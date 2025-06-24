@@ -92,7 +92,7 @@
                     <TextView style="@style/TaskRowLabel" android:text="Ngày" />
                     <TextView style="@style/TaskRowValue" android:text="Ngày 1/6/2025" />
                 </RelativeLayout>
-                <View style="@style/TaskDivider" />
+                <View style="@style/SettingsDivider" />
 
                 <!-- Hàng: Thời gian -->
                 <RelativeLayout style="@style/TaskRowLayout">
@@ -104,14 +104,14 @@
                         android:layout_centerVertical="true"
                         android:checked="true" />
                 </RelativeLayout>
-                <View style="@style/TaskDivider" />
+                <View style="@style/SettingsDivider" />
 
                 <!-- Hàng: Bắt đầu -->
                 <RelativeLayout style="@style/TaskRowLayout">
                     <TextView style="@style/TaskRowLabel" android:text="Bắt đầu" />
                     <TextView style="@style/TaskRowValue" android:text="09:00" />
                 </RelativeLayout>
-                <View style="@style/TaskDivider" />
+                <View style="@style/SettingsDivider" />
 
                 <!-- Hàng: Kết thúc -->
                 <RelativeLayout style="@style/TaskRowLayout">

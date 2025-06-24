@@ -12,15 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppQuanLyLichTrinh"
         tools:targetApi="31">
+        <!-- Đặt Activity1 làm màn hình khởi chạy -->
         <activity
-            android:name=".MainActivity"
+            android:name=".controller.Activity1"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Khai báo các activity khác -->
+        <activity android:name=".controller.Activity2" android:exported="false"/>
+        <activity android:name=".controller.Activity3" android:exported="false"/>
+        <activity android:name=".controller.MainActivity" android:exported="false"/>
     </application>
 
 </manifest>
