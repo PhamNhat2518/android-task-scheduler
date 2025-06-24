@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Phương thức kiểm tra người dùng đã đăng nhập từ trước chưa
+    /**
     @Override
     protected void onStart() {
         super.onStart();
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             goToMainActivity();
         }
     }
-
+*/
     /**
      * Hàm để gom việc ánh xạ View vào một chỗ cho gọn.
      */

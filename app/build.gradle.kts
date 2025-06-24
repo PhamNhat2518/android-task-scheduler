@@ -47,4 +47,6 @@ dependencies {
 
     // Thư viện Firebase Authentication
     implementation("com.google.firebase:firebase-auth")
+    // Thêm thư viện Firebase Realtime Database
+    implementation("com.google.firebase:firebase-database")
 }
