@@ -31,6 +31,9 @@
         <activity
             android:name=".controller.SettingsActivity"
             android:exported="false" />
+        <activity
+            android:name=".controller.AddTaskActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

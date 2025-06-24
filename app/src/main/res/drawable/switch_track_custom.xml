@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Trạng thái khi Switch được bật (Checked) -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <!-- Màu nền là màu chính của bạn -->
+            <solid android:color="@color/colorPrimary" />
+            <!-- Bo tròn các góc -->
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+
+    <!-- Trạng thái mặc định (khi Switch tắt) -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Màu nền là màu xám nhạt -->
+            <solid android:color="#E0E0E0" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+</selector>

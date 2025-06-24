@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_marginStart="-3dp"
                 android:text="Hủy bỏ"
                 android:textColor="#007AFF"
                 android:textSize="18sp" />
@@ -88,35 +89,52 @@
                 android:paddingHorizontal="16dp">
 
                 <!-- Hàng: Ngày -->
-                <RelativeLayout style="@style/TaskRowLayout">
+                <RelativeLayout
+                    android:id="@+id/rowDate"
+                    style="@style/TaskRowLayout">
                     <TextView style="@style/TaskRowLabel" android:text="Ngày" />
-                    <TextView style="@style/TaskRowValue" android:text="Ngày 1/6/2025" />
+                    <TextView
+                        android:id="@+id/tvDateValue"
+                        style="@style/TaskRowValue"
+                        android:text="Ngày 1/6/2025" />
                 </RelativeLayout>
                 <View style="@style/SettingsDivider" />
 
                 <!-- Hàng: Thời gian -->
                 <RelativeLayout style="@style/TaskRowLayout">
                     <TextView style="@style/TaskRowLabel" android:text="Thời gian" />
-                    <androidx.appcompat.widget.SwitchCompat
+                    <!-- Sử dụng Switch mới với style tùy chỉnh -->
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:checked="true" />
+                        android:checked="true"
+                        style="@style/CustomSwitch"/>
                 </RelativeLayout>
                 <View style="@style/SettingsDivider" />
 
                 <!-- Hàng: Bắt đầu -->
-                <RelativeLayout style="@style/TaskRowLayout">
+                <RelativeLayout
+                    android:id="@+id/rowStartTime"
+                    style="@style/TaskRowLayout">
                     <TextView style="@style/TaskRowLabel" android:text="Bắt đầu" />
-                    <TextView style="@style/TaskRowValue" android:text="09:00" />
+                    <TextView
+                        android:id="@+id/tvStartTimeValue"
+                        style="@style/TaskRowValue"
+                        android:text="09:00" />
                 </RelativeLayout>
                 <View style="@style/SettingsDivider" />
 
                 <!-- Hàng: Kết thúc -->
-                <RelativeLayout style="@style/TaskRowLayout">
+                <RelativeLayout
+                    android:id="@+id/rowEndTime"
+                    style="@style/TaskRowLayout">
                     <TextView style="@style/TaskRowLabel" android:text="Kết thúc" />
-                    <TextView style="@style/TaskRowValue" android:text="10:00" />
+                    <TextView
+                        android:id="@+id/tvEndTimeValue"
+                        style="@style/TaskRowValue" android:text="10:00" />
                 </RelativeLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

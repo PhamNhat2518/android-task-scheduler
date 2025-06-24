@@ -111,6 +111,13 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <!-- Style cho Switch tùy chỉnh -->
+    <style name="CustomSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <!-- Áp dụng drawable cho con trượt -->
+        <item name="android:thumb">@drawable/switch_thumb_custom</item>
+        <!-- Áp dụng drawable cho nền -->
+        <item name="track">@drawable/switch_track_custom</item>
+    </style>
     <!-- ĐÃ XÓA STYLE TASKDIVIDER BỊ TRÙNG LẶP -->
 
 </resources>

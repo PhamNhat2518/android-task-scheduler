@@ -1,15 +1,17 @@
-package vn.edu.tlu.appquanlylichtrinh.controller; // Hoặc package controller của bạn
+package vn.edu.tlu.appquanlylichtrinh.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu; // <-- QUAN TRỌNG: Thêm import này
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast; // Thêm Toast để kiểm tra
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import vn.edu.tlu.appquanlylichtrinh.R;
-import vn.edu.tlu.appquanlylichtrinh.controller.SettingsActivity;
+// Import AddTaskActivity từ đúng package
+import vn.edu.tlu.appquanlylichtrinh.controller.AddTaskActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    // --- BƯỚC QUAN TRỌNG: Phương thức này tạo ra các icon bên phải trên Toolbar ---
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -35,22 +36,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        // Xử lý click cho icon menu bên trái
+        // Dùng if-else if thay vì nhiều if riêng lẻ sẽ tốt hơn
         if (id == android.R.id.home) {
+            // Xử lý click cho icon menu bên trái
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        }
 
-        // Xử lý click cho icon lịch sử bên phải
-        if (id == R.id.action_history) {
-            // TODO: Code xử lý khi nhấn nút lịch sử
+        } else if (id == R.id.action_history) {
+            // Xử lý click cho icon lịch sử bên phải
+            Toast.makeText(this, "Lịch sử đã được nhấn", Toast.LENGTH_SHORT).show();
             return true;
-        }
 
-        // Xử lý click cho icon thêm bên phải
-        if (id == R.id.action_add) {
-            // TODO: Code xử lý khi nhấn nút thêm
+        } else if (id == R.id.action_add) {
+            // Xử lý click cho icon thêm bên phải
+            Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+            startActivity(intent);
             return true;
         }
 
