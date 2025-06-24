@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "848599578143",
+    "firebase_url": "https://appquanlylichtrinh-eadfa-default-rtdb.firebaseio.com",
+    "project_id": "appquanlylichtrinh-eadfa",
+    "storage_bucket": "appquanlylichtrinh-eadfa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848599578143:android:66eae98a2547c76d32872a",
+        "android_client_info": {
+          "package_name": "vn.edu.tlu.appquanlylichtrinh"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD_ErvVa0X1WscLd7-PS5d_8tF0nLRJAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
