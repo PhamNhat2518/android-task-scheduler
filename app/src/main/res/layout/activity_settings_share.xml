@@ -1,6 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".SettingsActivity">
+
+        <!-- 1. Thanh tiêu đề tùy chỉnh -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Xong"
+                android:textColor="#007AFF"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Cài đặt"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- 2. Nhóm các lựa chọn cài đặt -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#F5F5F5"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <RelativeLayout style="@style/SettingsRowLayout">
+                    <TextView style="@style/SettingsRowText" android:text="Lưu trữ" />
+                    <ImageView style="@style/SettingsRowIcon" android:src="@drawable/ic_arrow_forward_ios"/>
+                </RelativeLayout>
+                <View style="@style/SettingsDivider" />
+                <RelativeLayout style="@style/SettingsRowLayout">
+                    <TextView style="@style/SettingsRowText" android:text="Nhận lịch trình từ bạn bè" />
+                    <ImageView style="@style/SettingsRowIcon" android:src="@drawable/ic_download"/>
+                </RelativeLayout>
+                <View style="@style/SettingsDivider" />
+
+                <!-- Hàng "Chia sẻ lịch trình" - Đặt ID để bắt sự kiện click -->
+                <RelativeLayout
+                    android:id="@+id/rowShareSchedule"
+                    style="@style/SettingsRowLayout">
+                    <TextView style="@style/SettingsRowText" android:text="Chia sẻ lịch trình với bạn bè" />
+                    <ImageView style="@style/SettingsRowIcon" android:src="@drawable/ic_open_in_new"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 3. Khung chia sẻ - BAN ĐẦU SẼ BỊ ẨN ĐI -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/shareCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:cardBackgroundColor="#F5F5F5"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/grey_rounded_background"
+                    android:hint="Ngày bắt đầu: dd/mm/yy"
+                    android:padding="14dp"
+                    android:textSize="14sp"
+                    android:backgroundTint="#E0E0E0" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/grey_rounded_background"
+                    android:hint="Ngày kết thúc: dd/mm/yy"
+                    android:padding="14dp"
+                    android:textSize="14sp"
+                    android:backgroundTint="#E0E0E0" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/grey_rounded_background"
+                    android:hint="Nhập số điện thoại người mà bạn muốn chia sẻ"
+                    android:padding="14dp"
+                    android:textSize="14sp"
+                    android:backgroundTint="#E0E0E0" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingHorizontal="40dp"
+                    android:text="OK"
+                    android:textAllCaps="true"
+                    app:backgroundTint="#E0E0E0"
+                    app:cornerRadius="20dp"
+                    app:elevation="0dp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>

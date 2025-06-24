@@ -1,6 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".AddTaskActivity">
+
+        <!-- 1. Thanh tiêu đề tùy chỉnh -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="Hủy bỏ"
+                android:textColor="#007AFF"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Tác vụ"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="Thêm"
+                android:textColor="#007AFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- 2. Ô nhập tiêu đề -->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/grey_rounded_background"
+            android:hint="Tên tiêu đề"
+            android:padding="16dp"
+            android:textSize="16sp" />
+
+        <!-- 3. Ô nhập công việc phụ -->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/grey_rounded_background"
+            android:hint="Thêm công việc phụ"
+            android:padding="16dp"
+            android:textSize="16sp" />
+
+        <!-- 4. Nhóm cài đặt ngày giờ -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="#F0F0F0"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <!-- Hàng: Ngày -->
+                <RelativeLayout style="@style/TaskRowLayout">
+                    <TextView style="@style/TaskRowLabel" android:text="Ngày" />
+                    <TextView style="@style/TaskRowValue" android:text="Ngày 1/6/2025" />
+                </RelativeLayout>
+                <View style="@style/TaskDivider" />
+
+                <!-- Hàng: Thời gian -->
+                <RelativeLayout style="@style/TaskRowLayout">
+                    <TextView style="@style/TaskRowLabel" android:text="Thời gian" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:checked="true" />
+                </RelativeLayout>
+                <View style="@style/TaskDivider" />
+
+                <!-- Hàng: Bắt đầu -->
+                <RelativeLayout style="@style/TaskRowLayout">
+                    <TextView style="@style/TaskRowLabel" android:text="Bắt đầu" />
+                    <TextView style="@style/TaskRowValue" android:text="09:00" />
+                </RelativeLayout>
+                <View style="@style/TaskDivider" />
+
+                <!-- Hàng: Kết thúc -->
+                <RelativeLayout style="@style/TaskRowLayout">
+                    <TextView style="@style/TaskRowLabel" android:text="Kết thúc" />
+                    <TextView style="@style/TaskRowValue" android:text="10:00" />
+                </RelativeLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 5. Nút Lời nhắc -->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lời nhắc"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:padding="16dp"
+            app:cornerRadius="24dp"
+            app:backgroundTint="#F0F0F0"
+            android:textColor="@android:color/black"
+            app:elevation="0dp"
+            />
+    </LinearLayout>
+</ScrollView>
