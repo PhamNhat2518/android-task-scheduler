@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private MaterialButton btnLogin, btnRegister;
     // Khai báo các TextView khác nếu bạn cần xử lý (ví dụ: tvForgotPassword)
-
+    private TextView tvForgotPassword, tvCancel;
     private FirebaseAuth mAuth;
 
     @Override
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
+        tvCancel = findViewById(R.id.tvCancel);
     }
 
     /**
@@ -77,6 +79,10 @@ public class LoginActivity extends AppCompatActivity {
 
         // Bạn có thể thêm sự kiện cho các nút khác ở đây
         // findViewById(R.id.tvForgotPassword).setOnClickListener(...)
+        tvCancel.setOnClickListener(v -> {
+            // Đơn giản là đóng màn hình hiện tại lại
+            finish();
+        });
     }
 
     /**
