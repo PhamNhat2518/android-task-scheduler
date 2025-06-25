@@ -8,4 +8,9 @@
         android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_checklist_24"
         android:title="Công việc" />
+    <item
+        android:id="@+id/nav_pomodoro"
+        android:icon="@drawable/ic_timer"
+        android:title="Pomodoro" />
+
 </menu>

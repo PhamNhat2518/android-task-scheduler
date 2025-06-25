@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AppQuanLyLichTrinh</string>
+    <string name="pomodoro_mode_work">Pomodoro: Làm việc</string>
+    <string name="pomodoro_mode_rest">Pomodoro: Nghỉ ngơi</string>
+    <string name="btn_start">Bắt đầu</string>
+    <string name="btn_pause">Tạm dừng</string>
+    <string name="btn_resume">Tiếp tục</string>
+    <string name="btn_reset">Đặt lại</string>
 </resources>

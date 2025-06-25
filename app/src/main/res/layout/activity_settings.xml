@@ -84,18 +84,8 @@
             <View style="@style/SettingsDivider" />
 
             <!-- Lựa chọn: Chia sẻ lịch trình -->
-            <RelativeLayout style="@style/SettingsRowLayout">
-                <TextView
-                    style="@style/SettingsRowText"
-                    android:text="Chia sẻ lịch trình với bạn bè" />
-                <ImageView
-                    style="@style/SettingsRowIcon"
-                    android:src="@drawable/ic_open_in_new"
-                    android:contentDescription="Chia sẻ lịch trình"/>
-            </RelativeLayout>
 
         </LinearLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
     <!-- 3. Nút Đăng nhập -->

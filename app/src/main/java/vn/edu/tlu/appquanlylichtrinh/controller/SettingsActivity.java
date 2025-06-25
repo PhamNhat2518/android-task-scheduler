@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout; // Thêm import này
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView; // Thêm import này
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,6 +22,10 @@ public class SettingsActivity extends AppCompatActivity {
     private MaterialButton btnAuthAction; // Đổi tên biến cho chung chung hơn
     private FirebaseAuth mAuth;
 
+    // Thêm biến cho chức năng chia sẻ lịch trình
+    private RelativeLayout rowShareSchedule;
+    private MaterialCardView shareCard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +37,24 @@ public class SettingsActivity extends AppCompatActivity {
         // Ánh xạ View
         btnAuthAction = findViewById(R.id.btnLogin); // Vẫn dùng ID cũ là btnLogin
         tvDone = findViewById(R.id.tvDone);
+
+        // Ánh xạ cho chức năng chia sẻ lịch trình
+        rowShareSchedule = findViewById(R.id.rowShareSchedule);
+        shareCard = findViewById(R.id.shareCard);
+
+        // Xử lý hiện/ẩn khung chia sẻ khi bấm "Chia sẻ lịch trình với bạn bè"
+        if (rowShareSchedule != null && shareCard != null) {
+            rowShareSchedule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (shareCard.getVisibility() == View.GONE) {
+                        shareCard.setVisibility(View.VISIBLE);
+                    } else {
+                        shareCard.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
 
         // Thiết lập sự kiện click cho nút "Xong"
         tvDone.setOnClickListener(v -> finish());

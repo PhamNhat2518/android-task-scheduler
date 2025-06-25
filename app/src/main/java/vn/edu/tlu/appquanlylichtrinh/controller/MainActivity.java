@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +55,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.navigation_calendar) {
+                // 👉 Mở lại chính MainActivity (lịch trình)
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (id == R.id.nav_pomodoro) {
+                // 👉 Chuyển sang PomodoroActivity
+                Intent intent = new Intent(MainActivity.this, PomodoroActivity.class);
+                startActivity(intent);
+                return true;
+            }
+
+            return false;
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -184,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
+
         if (id == android.R.id.home) {
             // Xử lý click cho icon menu bên trái (mở Settings)
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -194,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
             // Khi nhấn nút lịch sử, gọi hàm hiển thị popup menu
             showFilterPopupMenu();
             return true;
+
 
         } else if (id == R.id.action_add) {
             // Xử lý click cho icon thêm bên phải (mở AddTask)

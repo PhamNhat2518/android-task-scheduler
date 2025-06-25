@@ -29,6 +29,8 @@
         <activity android:name=".controller.LoginActivity" android:exported="false"/>
         <activity android:name=".controller.RegisterActivity" android:exported="false"/>
         <activity android:name=".controller.ForgotPasswordActivity" android:exported="false"/>
+        <activity android:name=".controller.PomodoroActivity" android:exported="false" />
+
         <activity
             android:name=".controller.SettingsActivity"
             android:exported="false" />
