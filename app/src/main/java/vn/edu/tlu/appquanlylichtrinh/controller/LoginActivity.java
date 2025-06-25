@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         tvCancel = findViewById(R.id.tvCancel);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
     }
 
     /**
@@ -76,6 +77,11 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+        tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
+
 
         // Bạn có thể thêm sự kiện cho các nút khác ở đây
         // findViewById(R.id.tvForgotPassword).setOnClickListener(...)
