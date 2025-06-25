@@ -119,5 +119,23 @@
         <item name="track">@drawable/switch_track_custom</item>
     </style>
     <!-- ĐÃ XÓA STYLE TASKDIVIDER BỊ TRÙNG LẶP -->
+    <style name="DetailRowLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+    <style name="DetailIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+    </style>
+    <style name="DetailText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
 </resources>

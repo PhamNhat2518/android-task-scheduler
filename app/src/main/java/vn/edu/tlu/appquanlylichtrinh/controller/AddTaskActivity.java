@@ -69,7 +69,7 @@ public class AddTaskActivity extends AppCompatActivity {
         tvEndTimeValue = findViewById(R.id.tvEndTimeValue);
 
         // Ánh xạ nút "Thêm" và "Hủy bỏ"
-        tvAdd = findViewById(R.id.tvAdd);
+        tvAdd = findViewById(R.id.tvSave);
         tvCancel = findViewById(R.id.tvCancel);
     }
 
