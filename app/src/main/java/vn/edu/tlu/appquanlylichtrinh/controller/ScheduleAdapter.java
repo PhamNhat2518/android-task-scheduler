@@ -77,8 +77,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder.getItemViewType() == VIEW_TYPE_HEADER) {
             HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
             String dateHeader = (String) items.get(position);
-            headerHolder.tvDayOfWeek.setText(dateHeader);
-            headerHolder.tvDate.setText("");
+
+            // Tách chuỗi header thành Thứ và Ngày
+            String[] parts = dateHeader.split(", ");
+            if (parts.length == 2) {
+                headerHolder.tvDayOfWeek.setText(parts[0]); // Ví dụ: "Thứ hai"
+                headerHolder.tvDate.setText(parts[1]);      // Ví dụ: "25 tháng 6"
+            } else {
+                headerHolder.tvDayOfWeek.setText(dateHeader); // Dự phòng nếu định dạng sai
+                headerHolder.tvDate.setText("");
+            }
         } else {
             TaskViewHolder taskHolder = (TaskViewHolder) holder;
             Task currentTask = (Task) items.get(position);
