@@ -1,14 +1,19 @@
 package vn.edu.tlu.appquanlylichtrinh.controller; // Hoặc package view của bạn
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast; // Thêm import này
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog; // Thêm import này
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.database.DatabaseReference; // Thêm import này
+import com.google.firebase.database.FirebaseDatabase; // Thêm import này
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,29 +57,22 @@ public class TaskDetailBottomSheet extends BottomSheetDialogFragment {
         if (args != null) {
             Task currentTask = (Task) args.getSerializable(ARG_TASK);
             if (currentTask != null) {
-                // --- PHẦN SỬA LỖI NẰM Ở ĐÂY ---
-
-                // 1. Điền dữ liệu cho tất cả các View
+                // Điền dữ liệu cho tất cả các View
                 tvDetailTitle.setText(currentTask.getTitle());
-
-                // Xử lý và hiển thị ngày tháng
                 tvDetailDate.setText(formatDateForDisplay(currentTask.getDate()));
-
-                // Hiển thị giờ
                 String timeRange = currentTask.getStartTime() + " - " + currentTask.getEndTime();
                 tvDetailTime.setText(timeRange);
 
-                // Hiển thị công việc phụ
                 if (currentTask.getSubtask() != null && !currentTask.getSubtask().isEmpty()) {
                     tvDetailSubtasks.setText(currentTask.getSubtask());
                     tvDetailSubtasks.setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.labelSubtasks).setVisibility(View.VISIBLE);
                 } else {
-                    // Ẩn đi nếu không có công việc phụ
-                    view.findViewById(R.id.labelSubtasks).setVisibility(View.GONE); // Cần thêm ID "labelSubtasks" vào TextView "Nhiệm vụ phụ" trong XML
+                    view.findViewById(R.id.labelSubtasks).setVisibility(View.GONE);
                     tvDetailSubtasks.setVisibility(View.GONE);
                 }
 
-                // 2. Thiết lập sự kiện click
+                // Thiết lập sự kiện click cho nút Sửa
                 btnEdit.setOnClickListener(v -> {
                     Intent intent = new Intent(getContext(), EditTaskActivity.class);
                     intent.putExtra(EditTaskActivity.EXTRA_TASK, currentTask);
@@ -82,19 +80,59 @@ public class TaskDetailBottomSheet extends BottomSheetDialogFragment {
                     dismiss();
                 });
 
+                // --- PHẦN LOGIC XÓA ĐÃ ĐƯỢC THÊM VÀO ĐÂY ---
                 btnDelete.setOnClickListener(v -> {
-                    // TODO: Thêm logic xóa task
+                    // Hiển thị hộp thoại xác nhận trước khi xóa
+                    showDeleteConfirmationDialog(currentTask);
                 });
             }
         }
     }
 
     /**
-     * Hàm tiện ích để chuyển đổi định dạng ngày từ "Ngày dd/MM/yyyy" sang "dd tháng MM".
-     * @param firebaseDate Chuỗi ngày từ Firebase.
-     * @return Chuỗi ngày đã được định dạng lại.
+     * Hiển thị một hộp thoại để người dùng xác nhận việc xóa.
+     * @param task Tác vụ sẽ bị xóa.
      */
+    private void showDeleteConfirmationDialog(Task task) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa tác vụ '" + task.getTitle() + "' không?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    // Nếu người dùng nhấn "Xóa", gọi hàm để xóa trên Firebase
+                    deleteTaskFromFirebase(task);
+                })
+                .setNegativeButton("Hủy bỏ", null) // Không làm gì khi nhấn Hủy bỏ
+                .setIcon(R.drawable.ic_delete_white) // Dùng icon xóa cho đẹp
+                .show();
+    }
+
+    /**
+     * Xóa tác vụ khỏi Firebase Realtime Database.
+     * @param task Tác vụ cần xóa.
+     */
+    private void deleteTaskFromFirebase(Task task) {
+        // Lấy tham chiếu đến đúng tác vụ cần xóa
+        DatabaseReference taskRef = FirebaseDatabase.getInstance().getReference()
+                .child("tasks")
+                .child(task.getUserId())
+                .child(task.getTaskId());
+
+        // Gọi removeValue() để xóa toàn bộ nút dữ liệu của tác vụ đó
+        taskRef.removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    // Xóa thành công
+                    Toast.makeText(getContext(), "Đã xóa tác vụ thành công", Toast.LENGTH_SHORT).show();
+                    // Đóng BottomSheet sau khi xóa
+                    dismiss();
+                })
+                .addOnFailureListener(e -> {
+                    // Xóa thất bại
+                    Toast.makeText(getContext(), "Lỗi khi xóa: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
     private String formatDateForDisplay(String firebaseDate) {
+        // ... (hàm này không đổi) ...
         try {
             SimpleDateFormat originalFormat = new SimpleDateFormat("'Ngày' dd/MM/yyyy", Locale.getDefault());
             SimpleDateFormat targetFormat = new SimpleDateFormat("d 'tháng' M", new Locale("vi", "VN"));
@@ -102,7 +140,6 @@ public class TaskDetailBottomSheet extends BottomSheetDialogFragment {
             return targetFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            // Nếu có lỗi, trả về chuỗi gốc
             return firebaseDate;
         }
     }
