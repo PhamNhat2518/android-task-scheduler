@@ -12,6 +12,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 import vn.edu.tlu.appquanlylichtrinh.R;
 import vn.edu.tlu.appquanlylichtrinh.model.Task;
+import vn.edu.tlu.appquanlylichtrinh.controller.TaskDetailBottomSheet;
+
+import androidx.fragment.app.FragmentManager;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -19,11 +22,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int VIEW_TYPE_TASK = 1;
 
     private List<Object> items;
-
-    public ScheduleAdapter(List<Object> items) {
+    private FragmentManager fragmentManager;
+    public ScheduleAdapter(List<Object> items, FragmentManager fragmentManager) {
         this.items = items;
+        this.fragmentManager = fragmentManager;
     }
-
     // --- ViewHolder cho Header (ĐÃ THÊM CONSTRUCTOR) ---
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView tvDayOfWeek, tvDate;
@@ -110,6 +113,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             taskHolder.cbSubtask.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 updateTaskStatus(currentTask.getUserId(), currentTask.getTaskId(), "subtaskCompleted", isChecked);
             });
+            taskHolder.itemView.setOnClickListener(v -> {
+                TaskDetailBottomSheet bottomSheet = TaskDetailBottomSheet.newInstance(currentTask);
+                bottomSheet.show(fragmentManager, bottomSheet.getTag());
+            });
+
         }
     }
 

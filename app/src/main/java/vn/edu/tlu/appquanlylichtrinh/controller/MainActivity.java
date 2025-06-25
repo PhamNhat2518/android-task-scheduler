@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         displayList = new ArrayList<>();
-        scheduleAdapter = new ScheduleAdapter(displayList);
+        scheduleAdapter = new ScheduleAdapter(displayList, getSupportFragmentManager());
         recyclerView.setAdapter(scheduleAdapter);
 
         if (currentUser != null) {

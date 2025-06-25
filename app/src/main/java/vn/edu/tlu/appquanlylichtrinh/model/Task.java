@@ -1,6 +1,8 @@
-package vn.edu.tlu.appquanlylichtrinh.model;
 
-public class Task {
+package vn.edu.tlu.appquanlylichtrinh.model;
+import java.io.Serializable;
+
+public class Task implements Serializable {
     private String taskId;
     private String title;
     private String subtask;
