@@ -8,4 +8,5 @@
         android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_checklist_24"
         android:title="Công việc" />
+
 </menu>
