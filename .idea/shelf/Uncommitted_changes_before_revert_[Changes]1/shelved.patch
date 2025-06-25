@@ -1,0 +1,604 @@
+Index: app/src/main/res/menu/filter_menu.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<menu xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n\r\n    <!-- Nhóm các bộ lọc trạng thái. Chỉ một mục được chọn tại một thời điểm. -->\r\n    <group\r\n        android:id=\"@+id/filter_group_status\"\r\n        android:checkableBehavior=\"single\">\r\n        <item\r\n            android:id=\"@+id/filter_overdue\"\r\n            android:title=\"Quá hạn\" />\r\n        <item\r\n            android:id=\"@+id/filter_incomplete\"\r\n            android:title=\"Chưa hoàn tất\" />\r\n        <item\r\n            android:id=\"@+id/filter_complete\"\r\n            android:title=\"Hoàn tất\" />\r\n    </group>\r\n\r\n    <!-- Một mục riêng biệt để quay về chế độ xem danh sách mặc định -->\r\n    <item\r\n        android:id=\"@+id/filter_as_list\"\r\n        android:title=\"Danh sách\"\r\n        android:checkable=\"true\" />\r\n\r\n</menu>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/menu/filter_menu.xml b/app/src/main/res/menu/filter_menu.xml
+--- a/app/src/main/res/menu/filter_menu.xml	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/app/src/main/res/menu/filter_menu.xml	(date 1750861744978)
+@@ -1,7 +1,11 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<menu xmlns:android="http://schemas.android.com/apk/res/android">
++<menu xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto">
+ 
+-    <!-- Nhóm các bộ lọc trạng thái. Chỉ một mục được chọn tại một thời điểm. -->
++    <!--
++        Nhóm này có hành vi giống như RadioGroup,
++        chỉ một item có thể được chọn tại một thời điểm.
++    -->
+     <group
+         android:id="@+id/filter_group_status"
+         android:checkableBehavior="single">
+@@ -16,10 +20,13 @@
+             android:title="Hoàn tất" />
+     </group>
+ 
+-    <!-- Một mục riêng biệt để quay về chế độ xem danh sách mặc định -->
++    <!--
++        Mục này là một lựa chọn riêng biệt, có thể được tick hoặc không.
++        Chúng ta sẽ tự quản lý việc hiển thị icon dấu tick bằng code.
++    -->
+     <item
+         android:id="@+id/filter_as_list"
+         android:title="Danh sách"
+-        android:checkable="true" />
+-
++        android:checkable="true"
++        android:checked="true" />
+ </menu>
+\ No newline at end of file
+Index: app/src/main/java/vn/edu/tlu/appquanlylichtrinh/controller/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.tlu.appquanlylichtrinh.controller;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log; // << THÊM DÒNG NÀY\r\nimport android.view.Menu;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.Toast;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.appcompat.widget.PopupMenu;\r\nimport androidx.appcompat.widget.Toolbar;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\nimport java.text.ParseException;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.Date;\r\nimport java.util.LinkedHashMap;\r\nimport java.util.List;\r\nimport java.util.Locale;\r\nimport java.util.Map;\r\nimport java.util.stream.Collectors;\r\n\r\nimport vn.edu.tlu.appquanlylichtrinh.R;\r\nimport vn.edu.tlu.appquanlylichtrinh.model.Task;\r\nimport vn.edu.tlu.appquanlylichtrinh.controller.ScheduleAdapter;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    private enum FilterMode {\r\n        DEFAULT_WEEK,\r\n        OVERDUE,\r\n        INCOMPLETE,\r\n        COMPLETE\r\n    }\r\n\r\n    private RecyclerView recyclerView;\r\n    private ScheduleAdapter scheduleAdapter;\r\n    private List<Object> displayList;\r\n    private DatabaseReference databaseReference;\r\n    private FirebaseAuth mAuth;\r\n    private FilterMode currentFilter = FilterMode.DEFAULT_WEEK;\r\n    private List<Task> allTasksCache = new ArrayList<>();\r\n\r\n    private final SimpleDateFormat firebaseDateFormat = new SimpleDateFormat(\"'Ngày' dd/MM/yyyy\", Locale.getDefault());\r\n    private final SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat(\"EEEE\", new Locale(\"vi\", \"VN\"));\r\n    private final SimpleDateFormat dateMonthFormat = new SimpleDateFormat(\"d 'tháng' M\", new Locale(\"vi\", \"VN\"));\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        Toolbar toolbar = findViewById(R.id.toolbar);\r\n        setSupportActionBar(toolbar);\r\n        mAuth = FirebaseAuth.getInstance();\r\n        FirebaseUser currentUser = mAuth.getCurrentUser();\r\n        recyclerView = findViewById(R.id.recyclerView);\r\n        recyclerView.setLayoutManager(new LinearLayoutManager(this));\r\n        displayList = new ArrayList<>();\r\n        scheduleAdapter = new ScheduleAdapter(displayList, getSupportFragmentManager());\r\n        recyclerView.setAdapter(scheduleAdapter);\r\n\r\n        if (currentUser != null) {\r\n            String userId = currentUser.getUid();\r\n            databaseReference = FirebaseDatabase.getInstance().getReference(\"tasks\").child(userId);\r\n            fetchInitialTasks();\r\n        }\r\n    }\r\n\r\n    private void fetchInitialTasks() {\r\n        databaseReference.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n                allTasksCache.clear();\r\n                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {\r\n                    Task task = snapshot.getValue(Task.class);\r\n                    if (task != null) {\r\n                        allTasksCache.add(task);\r\n                    }\r\n                }\r\n                applyCurrentFilter();\r\n            }\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n                Toast.makeText(MainActivity.this, \"Lỗi tải dữ liệu\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void applyCurrentFilter() {\r\n        displayList.clear();\r\n        List<Task> filteredTasks;\r\n\r\n        switch (currentFilter) {\r\n            case OVERDUE:\r\n                filteredTasks = filterOverdueTasks(allTasksCache);\r\n                buildDisplayListForFilteredTasks(filteredTasks, \"Công việc quá hạn\");\r\n                break;\r\n            case INCOMPLETE:\r\n                filteredTasks = filterIncompleteTasks(allTasksCache);\r\n                buildDisplayListForFilteredTasks(filteredTasks, \"Công việc chưa hoàn tất\");\r\n                break;\r\n            case COMPLETE:\r\n                filteredTasks = filterCompletedTasks(allTasksCache);\r\n                buildDisplayListForFilteredTasks(filteredTasks, \"Công việc đã hoàn tất\");\r\n                break;\r\n            case DEFAULT_WEEK:\r\n            default:\r\n                List<Date> nextSevenDays = getNextSevenDays();\r\n                List<Task> weekTasks = filterTasksForNext7Days(allTasksCache, nextSevenDays);\r\n                buildDisplayListForWeek(nextSevenDays, groupTasksByDate(weekTasks));\r\n                break;\r\n        }\r\n        scheduleAdapter.notifyDataSetChanged();\r\n    }\r\n\r\n    // --- CÁC HÀM LỌC ĐÃ SỬA LỖI VÀ TỐI ƯU ---\r\n    private List<Task> filterOverdueTasks(List<Task> tasks) {\r\n        Date now = new Date();\r\n        return tasks.stream()\r\n                .filter(task -> {\r\n                    if (task.isCompleted()) return false;\r\n                    Date taskEndDate = getTaskEndDateTime(task);\r\n                    // Chỉ xem xét công việc quá hạn nếu có ngày hợp lệ (khác với ngày 0)\r\n                    return taskEndDate.getTime() != 0 && taskEndDate.before(now);\r\n                })\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    private List<Task> filterIncompleteTasks(List<Task> tasks) {\r\n        return tasks.stream()\r\n                .filter(task -> !task.isCompleted())\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    private List<Task> filterCompletedTasks(List<Task> tasks) {\r\n        return tasks.stream()\r\n                .filter(Task::isCompleted)\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    // *** PHƯƠNG THỨC ĐÃ SỬA LỖI NullPointerException ***\r\n    private List<Task> filterTasksForNext7Days(List<Task> allTasks, List<Date> weekDays) {\r\n        SimpleDateFormat keyFormat = new SimpleDateFormat(\"dd/MM/yyyy\", Locale.getDefault());\r\n        List<String> weekDateKeys = weekDays.stream().map(keyFormat::format).collect(Collectors.toList());\r\n\r\n        return allTasks.stream()\r\n                .filter(task -> {\r\n                    // Lấy chuỗi ngày ra một biến riêng để kiểm tra\r\n                    String dateString = task.getDate();\r\n\r\n                    // KIỂM TRA NULL HOẶC RỖNG TRƯỚC KHI PARSE\r\n                    if (dateString == null || dateString.isEmpty()) {\r\n                        return false; // Bỏ qua công việc này nếu không có ngày\r\n                    }\r\n\r\n                    // Nếu chuỗi ngày hợp lệ, mới tiến hành parse\r\n                    try {\r\n                        Date taskDate = firebaseDateFormat.parse(dateString);\r\n                        String taskDateKey = keyFormat.format(taskDate);\r\n                        return weekDateKeys.contains(taskDateKey);\r\n                    } catch (ParseException e) {\r\n                        Log.e(\"MainActivity\", \"Lỗi định dạng ngày không hợp lệ: \" + dateString, e);\r\n                        return false; // Bỏ qua nếu định dạng ngày sai\r\n                    }\r\n                })\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n\r\n    // --- CÁC HÀM TIỆN ÍCH ĐÃ SỬA LỖI VÀ TỐI ƯU ---\r\n\r\n    // *** PHƯƠNG THỨC ĐƯỢC LÀM CHO AN TOÀN HƠN VỚI NULL ***\r\n    private Date getTaskEndDateTime(Task task) {\r\n        String dateStr = task.getDate();\r\n        String timeStr = task.getEndTime();\r\n\r\n        // Kiểm tra null hoặc rỗng cho cả ngày và giờ\r\n        if (dateStr == null || dateStr.isEmpty() || timeStr == null || timeStr.isEmpty()) {\r\n            // Trả về một ngày không hợp lệ (ngày 0) để dễ dàng kiểm tra ở nơi gọi\r\n            return new Date(0);\r\n        }\r\n\r\n        try {\r\n            String dateTimeString = dateStr.replace(\"Ngày \", \"\") + \" \" + timeStr;\r\n            SimpleDateFormat combinedFormat = new SimpleDateFormat(\"dd/MM/yyyy HH:mm\", Locale.getDefault());\r\n            return combinedFormat.parse(dateTimeString);\r\n        } catch (ParseException e) {\r\n            Log.e(\"MainActivity\", \"Lỗi parse ngày giờ: \" + dateStr + \" \" + timeStr, e);\r\n            return new Date(0); // Trả về giá trị mặc định nếu có lỗi\r\n        }\r\n    }\r\n\r\n    private Map<String, List<Task>> groupTasksByDate(List<Task> tasks) {\r\n        Map<String, List<Task>> groupedTasks = new LinkedHashMap<>();\r\n        for (Task task : tasks) {\r\n            String dateString = task.getDate();\r\n            if (dateString != null && !dateString.isEmpty()) { // Kiểm tra null ở đây\r\n                try {\r\n                    Date taskDate = firebaseDateFormat.parse(dateString);\r\n                    String dateKey = firebaseDateFormat.format(taskDate); // Dùng lại định dạng chuẩn\r\n                    if (!groupedTasks.containsKey(dateKey)) {\r\n                        groupedTasks.put(dateKey, new ArrayList<>());\r\n                    }\r\n                    groupedTasks.get(dateKey).add(task);\r\n                } catch (ParseException e) {\r\n                    Log.e(\"MainActivity\", \"Lỗi parse ngày khi nhóm công việc: \" + dateString, e);\r\n                }\r\n            }\r\n        }\r\n        return groupedTasks;\r\n    }\r\n\r\n    private void buildDisplayListForFilteredTasks(List<Task> filteredTasks, String header) {\r\n        displayList.clear();\r\n        if (!filteredTasks.isEmpty()) {\r\n            displayList.add(header);\r\n            displayList.addAll(filteredTasks);\r\n        } else {\r\n            displayList.add(\"Không có công việc nào cho mục '\" + header + \"'\");\r\n        }\r\n    }\r\n\r\n    private void buildDisplayListForWeek(List<Date> weekDays, Map<String, List<Task>> tasksByDate) {\r\n        displayList.clear();\r\n        for (Date day : weekDays) {\r\n            String dayHeader = dayOfWeekFormat.format(day) + \", \" + dateMonthFormat.format(day);\r\n            displayList.add(dayHeader);\r\n\r\n            String dateKey = firebaseDateFormat.format(day); // Dùng định dạng chuẩn để lấy key\r\n            List<Task> tasksForDay = tasksByDate.get(dateKey);\r\n\r\n            if (tasksForDay != null && !tasksForDay.isEmpty()) {\r\n                displayList.addAll(tasksForDay);\r\n            }\r\n        }\r\n    }\r\n\r\n    private List<Date> getNextSevenDays() {\r\n        List<Date> dates = new ArrayList<>();\r\n        Calendar calendar = Calendar.getInstance();\r\n        for (int i = 0; i < 7; i++) {\r\n            dates.add(calendar.getTime());\r\n            calendar.add(Calendar.DAY_OF_YEAR, 1);\r\n        }\r\n        return dates;\r\n    }\r\n\r\n    // --- CÁC HÀM MENU (KHÔNG THAY ĐỔI) ---\r\n    @Override\r\n    public boolean onCreateOptionsMenu(Menu menu) {\r\n        getMenuInflater().inflate(R.menu.toolbar_menu, menu);\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean onOptionsItemSelected(@NonNull MenuItem item) {\r\n        int id = item.getItemId();\r\n        if (id == android.R.id.home) {\r\n            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);\r\n            startActivity(intent);\r\n            return true;\r\n        } else if (id == R.id.action_history) {\r\n            showFilterPopupMenu();\r\n            return true;\r\n        } else if (id == R.id.action_add) {\r\n            Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);\r\n            startActivity(intent);\r\n            return true;\r\n        }\r\n        return super.onOptionsItemSelected(item);\r\n    }\r\n\r\n    private void showFilterPopupMenu() {\r\n        View menuItemView = findViewById(R.id.action_history);\r\n        if (menuItemView == null) menuItemView = findViewById(R.id.toolbar);\r\n        if (menuItemView == null) return;\r\n\r\n        PopupMenu popup = new PopupMenu(this, menuItemView);\r\n        popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());\r\n\r\n        switch (currentFilter) {\r\n            case OVERDUE:\r\n                popup.getMenu().findItem(R.id.filter_overdue).setChecked(true);\r\n                break;\r\n            case INCOMPLETE:\r\n                popup.getMenu().findItem(R.id.filter_incomplete).setChecked(true);\r\n                break;\r\n            case COMPLETE:\r\n                popup.getMenu().findItem(R.id.filter_complete).setChecked(true);\r\n                break;\r\n            default:\r\n                popup.getMenu().findItem(R.id.filter_as_list).setChecked(true);\r\n                break;\r\n        }\r\n\r\n        popup.setOnMenuItemClickListener(menuItem -> {\r\n            menuItem.setChecked(true);\r\n            int itemId = menuItem.getItemId();\r\n            if (itemId == R.id.filter_overdue) {\r\n                currentFilter = FilterMode.OVERDUE;\r\n            } else if (itemId == R.id.filter_incomplete) {\r\n                currentFilter = FilterMode.INCOMPLETE;\r\n            } else if (itemId == R.id.filter_complete) {\r\n                currentFilter = FilterMode.COMPLETE;\r\n            } else if (itemId == R.id.filter_as_list) {\r\n                currentFilter = FilterMode.DEFAULT_WEEK;\r\n            }\r\n            applyCurrentFilter();\r\n            return true;\r\n        });\r\n\r\n        popup.show();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/vn/edu/tlu/appquanlylichtrinh/controller/MainActivity.java b/app/src/main/java/vn/edu/tlu/appquanlylichtrinh/controller/MainActivity.java
+--- a/app/src/main/java/vn/edu/tlu/appquanlylichtrinh/controller/MainActivity.java	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/app/src/main/java/vn/edu/tlu/appquanlylichtrinh/controller/MainActivity.java	(date 1750861744978)
+@@ -2,14 +2,12 @@
+ 
+ import android.content.Intent;
+ import android.os.Bundle;
+-import android.util.Log; // << THÊM DÒNG NÀY
+ import android.view.Menu;
+ import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.Toast;
+ import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+-import androidx.appcompat.widget.PopupMenu;
+ import androidx.appcompat.widget.Toolbar;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+@@ -31,33 +29,27 @@
+ import java.util.List;
+ import java.util.Locale;
+ import java.util.Map;
+-import java.util.stream.Collectors;
+-
++import androidx.appcompat.widget.PopupMenu;
+ import vn.edu.tlu.appquanlylichtrinh.R;
+ import vn.edu.tlu.appquanlylichtrinh.model.Task;
+ import vn.edu.tlu.appquanlylichtrinh.controller.ScheduleAdapter;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
+-    private enum FilterMode {
+-        DEFAULT_WEEK,
+-        OVERDUE,
+-        INCOMPLETE,
+-        COMPLETE
+-    }
+-
+     private RecyclerView recyclerView;
+     private ScheduleAdapter scheduleAdapter;
+     private List<Object> displayList;
+     private DatabaseReference databaseReference;
+     private FirebaseAuth mAuth;
+-    private FilterMode currentFilter = FilterMode.DEFAULT_WEEK;
+-    private List<Task> allTasksCache = new ArrayList<>();
+ 
++    // Định dạng ngày mà bạn lưu trên Firebase
+     private final SimpleDateFormat firebaseDateFormat = new SimpleDateFormat("'Ngày' dd/MM/yyyy", Locale.getDefault());
++    // Định dạng để hiển thị Thứ trong tuần
+     private final SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEEE", new Locale("vi", "VN"));
++    // Định dạng để hiển thị ngày/tháng
+     private final SimpleDateFormat dateMonthFormat = new SimpleDateFormat("d 'tháng' M", new Locale("vi", "VN"));
+ 
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+@@ -65,10 +57,13 @@
+ 
+         Toolbar toolbar = findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
++
+         mAuth = FirebaseAuth.getInstance();
+         FirebaseUser currentUser = mAuth.getCurrentUser();
++
+         recyclerView = findViewById(R.id.recyclerView);
+         recyclerView.setLayoutManager(new LinearLayoutManager(this));
++
+         displayList = new ArrayList<>();
+         scheduleAdapter = new ScheduleAdapter(displayList, getSupportFragmentManager());
+         recyclerView.setAdapter(scheduleAdapter);
+@@ -76,23 +71,29 @@
+         if (currentUser != null) {
+             String userId = currentUser.getUid();
+             databaseReference = FirebaseDatabase.getInstance().getReference("tasks").child(userId);
+-            fetchInitialTasks();
++            fetchAndDisplayWeekSchedule(); // Gọi hàm mới
+         }
+     }
+ 
+-    private void fetchInitialTasks() {
++    /**
++     * Hàm chính để lấy và hiển thị lịch trình cho 7 ngày tới.
++     */
++    private void fetchAndDisplayWeekSchedule() {
++        // Lấy danh sách 7 ngày tới
++        List<Date> nextSevenDays = getNextSevenDays();
++
+         databaseReference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+-                allTasksCache.clear();
+-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+-                    Task task = snapshot.getValue(Task.class);
+-                    if (task != null) {
+-                        allTasksCache.add(task);
+-                    }
+-                }
+-                applyCurrentFilter();
++                // Nhóm tất cả các task lấy từ Firebase theo ngày
++                Map<String, List<Task>> allTasksByDate = groupAllTasks(dataSnapshot);
++
++                // Xây dựng danh sách hiển thị cuối cùng
++                buildDisplayListForWeek(nextSevenDays, allTasksByDate);
++
++                scheduleAdapter.notifyDataSetChanged();
+             }
++
+             @Override
+             public void onCancelled(@NonNull DatabaseError databaseError) {
+                 Toast.makeText(MainActivity.this, "Lỗi tải dữ liệu", Toast.LENGTH_SHORT).show();
+@@ -100,155 +101,62 @@
+         });
+     }
+ 
+-    private void applyCurrentFilter() {
+-        displayList.clear();
+-        List<Task> filteredTasks;
+-
+-        switch (currentFilter) {
+-            case OVERDUE:
+-                filteredTasks = filterOverdueTasks(allTasksCache);
+-                buildDisplayListForFilteredTasks(filteredTasks, "Công việc quá hạn");
+-                break;
+-            case INCOMPLETE:
+-                filteredTasks = filterIncompleteTasks(allTasksCache);
+-                buildDisplayListForFilteredTasks(filteredTasks, "Công việc chưa hoàn tất");
+-                break;
+-            case COMPLETE:
+-                filteredTasks = filterCompletedTasks(allTasksCache);
+-                buildDisplayListForFilteredTasks(filteredTasks, "Công việc đã hoàn tất");
+-                break;
+-            case DEFAULT_WEEK:
+-            default:
+-                List<Date> nextSevenDays = getNextSevenDays();
+-                List<Task> weekTasks = filterTasksForNext7Days(allTasksCache, nextSevenDays);
+-                buildDisplayListForWeek(nextSevenDays, groupTasksByDate(weekTasks));
+-                break;
+-        }
+-        scheduleAdapter.notifyDataSetChanged();
+-    }
+-
+-    // --- CÁC HÀM LỌC ĐÃ SỬA LỖI VÀ TỐI ƯU ---
+-    private List<Task> filterOverdueTasks(List<Task> tasks) {
+-        Date now = new Date();
+-        return tasks.stream()
+-                .filter(task -> {
+-                    if (task.isCompleted()) return false;
+-                    Date taskEndDate = getTaskEndDateTime(task);
+-                    // Chỉ xem xét công việc quá hạn nếu có ngày hợp lệ (khác với ngày 0)
+-                    return taskEndDate.getTime() != 0 && taskEndDate.before(now);
+-                })
+-                .collect(Collectors.toList());
+-    }
+-
+-    private List<Task> filterIncompleteTasks(List<Task> tasks) {
+-        return tasks.stream()
+-                .filter(task -> !task.isCompleted())
+-                .collect(Collectors.toList());
+-    }
+-
+-    private List<Task> filterCompletedTasks(List<Task> tasks) {
+-        return tasks.stream()
+-                .filter(Task::isCompleted)
+-                .collect(Collectors.toList());
+-    }
+-
+-    // *** PHƯƠNG THỨC ĐÃ SỬA LỖI NullPointerException ***
+-    private List<Task> filterTasksForNext7Days(List<Task> allTasks, List<Date> weekDays) {
+-        SimpleDateFormat keyFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+-        List<String> weekDateKeys = weekDays.stream().map(keyFormat::format).collect(Collectors.toList());
+-
+-        return allTasks.stream()
+-                .filter(task -> {
+-                    // Lấy chuỗi ngày ra một biến riêng để kiểm tra
+-                    String dateString = task.getDate();
+-
+-                    // KIỂM TRA NULL HOẶC RỖNG TRƯỚC KHI PARSE
+-                    if (dateString == null || dateString.isEmpty()) {
+-                        return false; // Bỏ qua công việc này nếu không có ngày
+-                    }
+-
+-                    // Nếu chuỗi ngày hợp lệ, mới tiến hành parse
+-                    try {
+-                        Date taskDate = firebaseDateFormat.parse(dateString);
+-                        String taskDateKey = keyFormat.format(taskDate);
+-                        return weekDateKeys.contains(taskDateKey);
+-                    } catch (ParseException e) {
+-                        Log.e("MainActivity", "Lỗi định dạng ngày không hợp lệ: " + dateString, e);
+-                        return false; // Bỏ qua nếu định dạng ngày sai
+-                    }
+-                })
+-                .collect(Collectors.toList());
+-    }
+-
+-
+-    // --- CÁC HÀM TIỆN ÍCH ĐÃ SỬA LỖI VÀ TỐI ƯU ---
+-
+-    // *** PHƯƠNG THỨC ĐƯỢC LÀM CHO AN TOÀN HƠN VỚI NULL ***
+-    private Date getTaskEndDateTime(Task task) {
+-        String dateStr = task.getDate();
+-        String timeStr = task.getEndTime();
+-
+-        // Kiểm tra null hoặc rỗng cho cả ngày và giờ
+-        if (dateStr == null || dateStr.isEmpty() || timeStr == null || timeStr.isEmpty()) {
+-            // Trả về một ngày không hợp lệ (ngày 0) để dễ dàng kiểm tra ở nơi gọi
+-            return new Date(0);
+-        }
+-
+-        try {
+-            String dateTimeString = dateStr.replace("Ngày ", "") + " " + timeStr;
+-            SimpleDateFormat combinedFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+-            return combinedFormat.parse(dateTimeString);
+-        } catch (ParseException e) {
+-            Log.e("MainActivity", "Lỗi parse ngày giờ: " + dateStr + " " + timeStr, e);
+-            return new Date(0); // Trả về giá trị mặc định nếu có lỗi
+-        }
+-    }
+-
+-    private Map<String, List<Task>> groupTasksByDate(List<Task> tasks) {
++    /**
++     * Nhóm tất cả các task từ Firebase vào một Map với key là ngày (dd/MM/yyyy).
++     */
++    private Map<String, List<Task>> groupAllTasks(DataSnapshot dataSnapshot) {
+         Map<String, List<Task>> groupedTasks = new LinkedHashMap<>();
+-        for (Task task : tasks) {
+-            String dateString = task.getDate();
+-            if (dateString != null && !dateString.isEmpty()) { // Kiểm tra null ở đây
++        SimpleDateFormat keyFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
++
++        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
++            Task task = snapshot.getValue(Task.class);
++            if (task != null && task.getDate() != null) {
+                 try {
+-                    Date taskDate = firebaseDateFormat.parse(dateString);
+-                    String dateKey = firebaseDateFormat.format(taskDate); // Dùng lại định dạng chuẩn
++                    // Chuyển đổi chuỗi ngày từ Firebase sang đối tượng Date
++                    Date taskDate = firebaseDateFormat.parse(task.getDate());
++                    // Tạo một key chuẩn (dd/MM/yyyy) để nhóm
++                    String dateKey = keyFormat.format(taskDate);
++
+                     if (!groupedTasks.containsKey(dateKey)) {
+                         groupedTasks.put(dateKey, new ArrayList<>());
+                     }
+                     groupedTasks.get(dateKey).add(task);
+                 } catch (ParseException e) {
+-                    Log.e("MainActivity", "Lỗi parse ngày khi nhóm công việc: " + dateString, e);
++                    e.printStackTrace(); // Lỗi nếu định dạng ngày trên Firebase bị sai
+                 }
+             }
+         }
+         return groupedTasks;
+     }
+ 
+-    private void buildDisplayListForFilteredTasks(List<Task> filteredTasks, String header) {
+-        displayList.clear();
+-        if (!filteredTasks.isEmpty()) {
+-            displayList.add(header);
+-            displayList.addAll(filteredTasks);
+-        } else {
+-            displayList.add("Không có công việc nào cho mục '" + header + "'");
+-        }
+-    }
+-
++    /**
++     * Xây dựng danh sách hiển thị cuối cùng, bao gồm cả những ngày không có task.
++     */
+     private void buildDisplayListForWeek(List<Date> weekDays, Map<String, List<Task>> tasksByDate) {
+         displayList.clear();
++        SimpleDateFormat keyFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
++
+         for (Date day : weekDays) {
++            // Tạo chuỗi header cho ngày
+             String dayHeader = dayOfWeekFormat.format(day) + ", " + dateMonthFormat.format(day);
+-            displayList.add(dayHeader);
++            displayList.add(dayHeader); // Thêm header vào danh sách hiển thị
+ 
+-            String dateKey = firebaseDateFormat.format(day); // Dùng định dạng chuẩn để lấy key
++            // Tìm các task tương ứng với ngày này
++            String dateKey = keyFormat.format(day);
+             List<Task> tasksForDay = tasksByDate.get(dateKey);
+ 
+             if (tasksForDay != null && !tasksForDay.isEmpty()) {
++                // Nếu có task, thêm chúng vào danh sách hiển thị
+                 displayList.addAll(tasksForDay);
+             }
++            // Nếu không có task, không cần làm gì thêm, chỉ có header ngày được hiển thị.
+         }
+     }
+ 
++
++    /**
++     * Tạo ra một danh sách 7 đối tượng Date, bắt đầu từ hôm nay.
++     */
+     private List<Date> getNextSevenDays() {
+         List<Date> dates = new ArrayList<>();
+         Calendar calendar = Calendar.getInstance();
+@@ -258,71 +166,109 @@
+         }
+         return dates;
+     }
++    // --- PHẦN BỊ THIẾU ĐÃ ĐƯỢC THÊM LẠI Ở ĐÂY ---
+ 
+-    // --- CÁC HÀM MENU (KHÔNG THAY ĐỔI) ---
++    /**
++     * Phương thức này được gọi để tạo các icon bên phải trên Toolbar.
++     */
+     @Override
+     public boolean onCreateOptionsMenu(Menu menu) {
+         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+         return true;
+     }
+ 
++    /**
++     * Phương thức này xử lý sự kiện click trên tất cả các icon của Toolbar.
++     */
+     @Override
+     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+         int id = item.getItemId();
++
+         if (id == android.R.id.home) {
++            // Xử lý click cho icon menu bên trái (mở Settings)
+             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+             startActivity(intent);
+             return true;
++
+         } else if (id == R.id.action_history) {
++            // Khi nhấn nút lịch sử, gọi hàm hiển thị popup menu
+             showFilterPopupMenu();
+             return true;
++
+         } else if (id == R.id.action_add) {
++            // Xử lý click cho icon thêm bên phải (mở AddTask)
+             Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+             startActivity(intent);
+             return true;
+         }
++
+         return super.onOptionsItemSelected(item);
++
++
+     }
+-
++    /**
++     * Hàm để hiển thị PopupMenu khi nhấn vào icon lịch sử.
++     */
+     private void showFilterPopupMenu() {
++        // Tìm View của icon lịch sử để PopupMenu hiện ra đúng vị trí
+         View menuItemView = findViewById(R.id.action_history);
+-        if (menuItemView == null) menuItemView = findViewById(R.id.toolbar);
+-        if (menuItemView == null) return;
++        if (menuItemView == null) {
++            // Dự phòng nếu không tìm thấy view (ví dụ trên các thiết bị cũ)
++            // Lấy view của toolbar làm vị trí neo
++            menuItemView = findViewById(R.id.toolbar);
++        }
+ 
+         PopupMenu popup = new PopupMenu(this, menuItemView);
++        // "Thổi phồng" file menu của chúng ta vào popup
+         popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
+ 
+-        switch (currentFilter) {
+-            case OVERDUE:
+-                popup.getMenu().findItem(R.id.filter_overdue).setChecked(true);
+-                break;
+-            case INCOMPLETE:
+-                popup.getMenu().findItem(R.id.filter_incomplete).setChecked(true);
+-                break;
+-            case COMPLETE:
+-                popup.getMenu().findItem(R.id.filter_complete).setChecked(true);
+-                break;
+-            default:
+-                popup.getMenu().findItem(R.id.filter_as_list).setChecked(true);
+-                break;
++        // --- Logic để hiển thị dấu tick ---
++        // Lấy mục menu "Danh sách"
++        MenuItem listMenuItem = popup.getMenu().findItem(R.id.filter_as_list);
++        // Đặt icon dấu tick nếu nó đang được chọn
++        if (listMenuItem.isChecked()) {
++            listMenuItem.setIcon(R.drawable.ic_check_24);
++        } else {
++            listMenuItem.setIcon(null);
+         }
+ 
++        // Đặt sự kiện lắng nghe khi một mục trong popup được chọn
+         popup.setOnMenuItemClickListener(menuItem -> {
+-            menuItem.setChecked(true);
+             int itemId = menuItem.getItemId();
+-            if (itemId == R.id.filter_overdue) {
+-                currentFilter = FilterMode.OVERDUE;
+-            } else if (itemId == R.id.filter_incomplete) {
+-                currentFilter = FilterMode.INCOMPLETE;
+-            } else if (itemId == R.id.filter_complete) {
+-                currentFilter = FilterMode.COMPLETE;
++
++            if (itemId == R.id.filter_overdue || itemId == R.id.filter_incomplete || itemId == R.id.filter_complete) {
++                // Xử lý cho nhóm radio button
++                menuItem.setChecked(true); // Đánh dấu mục được chọn
++                Toast.makeText(this, "Đã chọn: " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
++                // TODO: Thêm logic lọc danh sách ở đây
++                return true;
+             } else if (itemId == R.id.filter_as_list) {
+-                currentFilter = FilterMode.DEFAULT_WEEK;
++                // Xử lý cho mục "Danh sách"
++                menuItem.setChecked(!menuItem.isChecked()); // Đảo trạng thái tick
++                if (menuItem.isChecked()) {
++                    menuItem.setIcon(R.drawable.ic_check_24);
++                } else {
++                    menuItem.setIcon(null);
++                }
++                // Giữ cho popup không bị đóng lại ngay lập tức để người dùng thấy sự thay đổi
++                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
++                menuItem.setActionView(new View(getApplicationContext()));
++                menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
++                    @Override
++                    public boolean onMenuItemActionExpand(MenuItem item) {
++                        return false;
++                    }
++                    @Override
++                    public boolean onMenuItemActionCollapse(MenuItem item) {
++                        return false;
++                    }
++                });
++                return false; // Trả về false để menu không đóng lại
+             }
+-            applyCurrentFilter();
+-            return true;
++            return false;
+         });
+ 
++        // Hiển thị popup menu
+         popup.show();
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/list_item_schedule_day.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:orientation=\"vertical\">\r\n\r\n    <!-- Phần tiêu đề ngày (nền xám) -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@color/colorBackgroundLightGrey\"\r\n        android:paddingHorizontal=\"16dp\"\r\n        android:paddingVertical=\"8dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvDayOfWeek\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:text=\"Thứ 2\"\r\n            android:textColor=\"@color/colorTextDarkGrey\"\r\n            android:textStyle=\"bold\"\r\n            android:textSize=\"16sp\"/>\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvDate\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"1 tháng 6\"\r\n            android:textColor=\"@color/colorTextDarkGrey\"\r\n            android:textSize=\"14sp\"/>\r\n    </LinearLayout>\r\n\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@color/white\"\r\n        android:paddingHorizontal=\"16dp\"\r\n        android:paddingVertical=\"20dp\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvTaskDescription\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_alignParentStart=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:text=\"Không có công việc nào\"\r\n            android:textColor=\"@android:color/darker_gray\"\r\n            android:textSize=\"16sp\"/>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/ivAddTask\"\r\n            android:layout_width=\"32dp\"\r\n            android:layout_height=\"32dp\"\r\n            android:layout_alignParentEnd=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:src=\"@drawable/ic_add_purple\"\r\n            android:contentDescription=\"Thêm công việc\"/>\r\n\r\n    </RelativeLayout>\r\n</LinearLayout>\r\n    <!-- File: res/layout/list_item_schedule_day.xml -->\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\nxmlns:tools=\"http://schemas.android.com/tools\"\r\nandroid:layout_width=\"match_parent\"\r\nandroid:layout_height=\"wrap_content\"\r\nandroid:orientation=\"vertical\"\r\nandroid:padding=\"16dp\">\r\n\r\n\r\n<TextView\r\n    android:id=\"@+id/day_header_text\"\r\n    android:layout_width=\"wrap_content\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:text=\"Hôm nay, 25 tháng 6\"\r\n    android:textSize=\"20sp\"\r\n    android:textStyle=\"bold\"\r\n    android:textColor=\"@android:color/black\"\r\n    android:layout_marginBottom=\"8dp\"/>\r\n\r\n\r\n<androidx.recyclerview.widget.RecyclerView\r\n    android:id=\"@+id/inner_tasks_recycler_view\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    tools:listitem=\"@layout/list_item_task\" />\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/list_item_schedule_day.xml b/app/src/main/res/layout/list_item_schedule_day.xml
+--- a/app/src/main/res/layout/list_item_schedule_day.xml	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/app/src/main/res/layout/list_item_schedule_day.xml	(date 1750861761724)
+@@ -62,31 +62,4 @@
+             android:contentDescription="Thêm công việc"/>
+ 
+     </RelativeLayout>
+-</LinearLayout>
+-    <!-- File: res/layout/list_item_schedule_day.xml -->
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-xmlns:tools="http://schemas.android.com/tools"
+-android:layout_width="match_parent"
+-android:layout_height="wrap_content"
+-android:orientation="vertical"
+-android:padding="16dp">
+-
+-
+-<TextView
+-    android:id="@+id/day_header_text"
+-    android:layout_width="wrap_content"
+-    android:layout_height="wrap_content"
+-    android:text="Hôm nay, 25 tháng 6"
+-    android:textSize="20sp"
+-    android:textStyle="bold"
+-    android:textColor="@android:color/black"
+-    android:layout_marginBottom="8dp"/>
+-
+-
+-<androidx.recyclerview.widget.RecyclerView
+-    android:id="@+id/inner_tasks_recycler_view"
+-    android:layout_width="match_parent"
+-    android:layout_height="wrap_content"
+-    tools:listitem="@layout/list_item_task" />
+-
+ </LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/drawable/task_checkbox_background.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<selector xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <!-- Trạng thái khi được check (hoàn thành) -->\r\n    <item android:state_checked=\"true\">\r\n        <layer-list>\r\n            <!-- Lớp 1: Vòng tròn nền màu chính -->\r\n            <item>\r\n                <shape android:shape=\"oval\">\r\n                    <solid android:color=\"@color/colorPrimary\"/>\r\n                    <size android:width=\"28dp\" android:height=\"28dp\"/>\r\n                </shape>\r\n            </item>\r\n\r\n            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa - ĐÃ THÊM KÍCH THƯỚC -->\r\n            <item\r\n                android:drawable=\"@drawable/ic_check_white_24\"\r\n                android:gravity=\"center\"\r\n                android:width=\"24dp\"\r\n                android:height=\"24dp\" />\r\n\r\n        </layer-list>\r\n    </item>\r\n\r\n    <!-- Trạng thái mặc định (chưa hoàn thành) -->\r\n    <item>\r\n        <shape android:shape=\"oval\">\r\n            <solid android:color=\"@android:color/transparent\"/>\r\n            <stroke android:width=\"1.5dp\" android:color=\"#BDBDBD\"/>\r\n            <size android:width=\"28dp\" android:height=\"28dp\"/>\r\n        </shape>\r\n    </item>\r\n</selector>\r\n<selector xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n<!-- Trạng thái khi được tick (checked) -->\r\n<item android:state_checked=\"true\">\r\n    <shape android:shape=\"oval\">\r\n        <solid android:color=\"?attr/colorPrimary\" /> <!-- Lấy màu chính của app -->\r\n        <size android:width=\"24dp\" android:height=\"24dp\" />\r\n    </shape>\r\n</item>\r\n<!-- Trạng thái mặc định (chưa tick) -->\r\n<item android:state_checked=\"false\">\r\n    <shape android:shape=\"oval\">\r\n        <solid android:color=\"@android:color/transparent\" />\r\n        <stroke android:width=\"2dp\" android:color=\"#BDBDBD\" /> <!-- Viền màu xám -->\r\n        <size android:width=\"24dp\" android:height=\"24dp\" />\r\n    </shape>\r\n</item>\r\n</selector>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/task_checkbox_background.xml b/app/src/main/res/drawable/task_checkbox_background.xml
+--- a/app/src/main/res/drawable/task_checkbox_background.xml	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/app/src/main/res/drawable/task_checkbox_background.xml	(date 1750861761732)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <selector xmlns:android="http://schemas.android.com/apk/res/android">
++
+     <!-- Trạng thái khi được check (hoàn thành) -->
+     <item android:state_checked="true">
+         <layer-list>
+@@ -11,7 +12,7 @@
+                 </shape>
+             </item>
+ 
+-            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa - ĐÃ THÊM KÍCH THƯỚC -->
++            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa -->
+             <item
+                 android:drawable="@drawable/ic_check_white_24"
+                 android:gravity="center"
+@@ -29,21 +30,6 @@
+             <size android:width="28dp" android:height="28dp"/>
+         </shape>
+     </item>
++
+ </selector>
+-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+-<!-- Trạng thái khi được tick (checked) -->
+-<item android:state_checked="true">
+-    <shape android:shape="oval">
+-        <solid android:color="?attr/colorPrimary" /> <!-- Lấy màu chính của app -->
+-        <size android:width="24dp" android:height="24dp" />
+-    </shape>
+-</item>
+-<!-- Trạng thái mặc định (chưa tick) -->
+-<item android:state_checked="false">
+-    <shape android:shape="oval">
+-        <solid android:color="@android:color/transparent" />
+-        <stroke android:width="2dp" android:color="#BDBDBD" /> <!-- Viền màu xám -->
+-        <size android:width="24dp" android:height="24dp" />
+-    </shape>
+-</item>
+-</selector>
+\ No newline at end of file
++    <!-- MỌI THỨ SAU DÒNG NÀY ĐÃ ĐƯỢC XÓA BỎ -->
+\ No newline at end of file
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n        <DropdownSelection timestamp=\"2025-06-25T11:20:14.688783100Z\">\r\n          <Target type=\"DEFAULT_BOOT\">\r\n            <handle>\r\n              <DeviceId pluginId=\"LocalEmulator\" identifier=\"path=C:\\Users\\Gigabyte\\.android\\avd\\Pixel_9_Pro_XL.avd\" />\r\n            </handle>\r\n          </Target>\r\n        </DropdownSelection>\r\n        <DialogSelection />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/.idea/deploymentTargetSelector.xml	(date 1750861744977)
+@@ -4,14 +4,6 @@
+     <selectionStates>
+       <SelectionState runConfigName="app">
+         <option name="selectionMode" value="DROPDOWN" />
+-        <DropdownSelection timestamp="2025-06-25T11:20:14.688783100Z">
+-          <Target type="DEFAULT_BOOT">
+-            <handle>
+-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Gigabyte\.android\avd\Pixel_9_Pro_XL.avd" />
+-            </handle>
+-          </Target>
+-        </DropdownSelection>
+-        <DialogSelection />
+       </SelectionState>
+     </selectionStates>
+   </component>

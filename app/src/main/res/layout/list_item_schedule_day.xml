@@ -34,59 +34,11 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
-
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/inner_tasks_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp">
+        android:nestedScrollingEnabled="false"/>
 
-        <TextView
-            android:id="@+id/tvTaskDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Không có công việc nào"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"/>
-
-        <ImageView
-            android:id="@+id/ivAddTask"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_add_purple"
-            android:contentDescription="Thêm công việc"/>
-
-    </RelativeLayout>
 </LinearLayout>
     <!-- File: res/layout/list_item_schedule_day.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="16dp">
-
-
-<TextView
-    android:id="@+id/day_header_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Hôm nay, 25 tháng 6"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    android:textColor="@android:color/black"
-    android:layout_marginBottom="8dp"/>
-
-
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/inner_tasks_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:listitem="@layout/list_item_task" />
-
-</LinearLayout>

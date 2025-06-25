@@ -39,17 +39,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.DayVie
         DaySchedule currentDay = dayScheduleList.get(position);
 
         // Định dạng và hiển thị tiêu đề ngày
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, 'ngày' dd 'tháng' MM", new Locale("vi", "VN"));
-        holder.dayHeaderText.setText(dateFormat.format(currentDay.getDate()));
+        SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEEE", new Locale("vi", "VN"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d 'tháng' M", new Locale("vi", "VN"));
+        holder.tvDayOfWeek.setText(dayOfWeekFormat.format(currentDay.getDate()));
+        holder.tvDate.setText(dateFormat.format(currentDay.getDate()));
 
         // --- Chìa khóa ở đây: Thiết lập cho RecyclerView lồng bên trong ---
-        // 1. Tạo một TaskAdapter mới cho danh sách công việc của ngày hôm đó
         TaskAdapter innerTaskAdapter = new TaskAdapter(currentDay.getTasks(), context);
-
-        // 2. Thiết lập LayoutManager và Adapter cho inner RecyclerView
         holder.innerTasksRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.innerTasksRecyclerView.setAdapter(innerTaskAdapter);
-        holder.innerTasksRecyclerView.setHasFixedSize(true); // Tối ưu hóa
+        holder.innerTasksRecyclerView.setHasFixedSize(true);
     }
 
     @Override
@@ -58,12 +57,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.DayVie
     }
 
     public static class DayViewHolder extends RecyclerView.ViewHolder {
-        TextView dayHeaderText;
+        TextView tvDayOfWeek, tvDate;
         RecyclerView innerTasksRecyclerView;
 
         public DayViewHolder(@NonNull View itemView) {
             super(itemView);
-            dayHeaderText = itemView.findViewById(R.id.day_header_text);
+            tvDayOfWeek = itemView.findViewById(R.id.tvDayOfWeek);
+            tvDate = itemView.findViewById(R.id.tvDate);
             innerTasksRecyclerView = itemView.findViewById(R.id.inner_tasks_recycler_view);
         }
     }

@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     // Định dạng để hiển thị ngày/tháng
     private final SimpleDateFormat dateMonthFormat = new SimpleDateFormat("d 'tháng' M", new Locale("vi", "VN"));
 
+    // Thêm enum và biến filterMode
+    private enum FilterMode { ALL, OVERDUE, INCOMPLETE, COMPLETE }
+    private FilterMode filterMode = FilterMode.ALL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,22 +247,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildDisplayListForWeek(List<Date> weekDays, Map<String, List<Task>> tasksByDate) {
         displayList.clear();
+<<<<<<< HEAD
+=======
+        java.text.SimpleDateFormat keyFormat = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+>>>>>>> b4251b2 (complete nhận lịch trình từ bạn bè, chia sẻ sẻ lịch trình cho bạn bè, lọc)
         for (Date day : weekDays) {
-            // Tạo chuỗi header cho ngày
             String dayHeader = dayOfWeekFormat.format(day) + ", " + dateMonthFormat.format(day);
             displayList.add(dayHeader);
+<<<<<<< HEAD
 
             String dateKey = firebaseDateFormat.format(day); // Dùng định dạng chuẩn để lấy key
+=======
+            String dateKey = keyFormat.format(day);
+>>>>>>> b4251b2 (complete nhận lịch trình từ bạn bè, chia sẻ sẻ lịch trình cho bạn bè, lọc)
             List<Task> tasksForDay = tasksByDate.get(dateKey);
-
             if (tasksForDay != null && !tasksForDay.isEmpty()) {
-                // Nếu có task, thêm chúng vào danh sách hiển thị
-                displayList.addAll(tasksForDay);
+                List<Task> filteredTasks = filterTasks(tasksForDay);
+                if (filteredTasks != null && !filteredTasks.isEmpty()) {
+                    displayList.addAll(filteredTasks);
+                }
             }
-            // Nếu không có task, không cần làm gì thêm, chỉ có header ngày được hiển thị.
         }
     }
-
 
     /**
      * Tạo ra một danh sách 7 đối tượng Date, bắt đầu từ hôm nay.
@@ -273,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return dates;
     }
-    // --- PHẦN BỊ THIẾU ĐÃ ĐƯỢC THÊM LẠI Ở ĐÂY ---
 
     /**
      * Phương thức này được gọi để tạo các icon bên phải trên Toolbar.
@@ -311,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+<<<<<<< HEAD
     private void showFilterPopupMenu() {
         View menuItemView = findViewById(R.id.action_history);
         if (menuItemView == null) menuItemView = findViewById(R.id.toolbar);
@@ -320,6 +329,21 @@ public class MainActivity extends AppCompatActivity {
         popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
 
         switch (currentFilter) {
+=======
+    /**
+     * Hàm để hiển thị PopupMenu khi nhấn vào icon lịch sử.
+     */
+    private void showFilterPopupMenu() {
+        View menuItemView = findViewById(R.id.action_history);
+        if (menuItemView == null) {
+            menuItemView = findViewById(R.id.toolbar);
+        }
+        androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(this, menuItemView);
+        popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
+
+        // Đánh dấu checked cho đúng mục filter đang chọn
+        switch (filterMode) {
+>>>>>>> b4251b2 (complete nhận lịch trình từ bạn bè, chia sẻ sẻ lịch trình cho bạn bè, lọc)
             case OVERDUE:
                 popup.getMenu().findItem(R.id.filter_overdue).setChecked(true);
                 break;
@@ -329,6 +353,10 @@ public class MainActivity extends AppCompatActivity {
             case COMPLETE:
                 popup.getMenu().findItem(R.id.filter_complete).setChecked(true);
                 break;
+<<<<<<< HEAD
+=======
+            case ALL:
+>>>>>>> b4251b2 (complete nhận lịch trình từ bạn bè, chia sẻ sẻ lịch trình cho bạn bè, lọc)
             default:
                 popup.getMenu().findItem(R.id.filter_as_list).setChecked(true);
                 break;
@@ -338,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
             menuItem.setChecked(true);
             int itemId = menuItem.getItemId();
             if (itemId == R.id.filter_overdue) {
+<<<<<<< HEAD
                 currentFilter = FilterMode.OVERDUE;
             } else if (itemId == R.id.filter_incomplete) {
                 currentFilter = FilterMode.INCOMPLETE;
@@ -345,11 +374,67 @@ public class MainActivity extends AppCompatActivity {
                 currentFilter = FilterMode.COMPLETE;
             } else if (itemId == R.id.filter_as_list) {
                 currentFilter = FilterMode.DEFAULT_WEEK;
+=======
+                filterMode = FilterMode.OVERDUE;
+                menuItem.setChecked(true);
+                fetchAndDisplayWeekSchedule();
+                return true;
+            } else if (itemId == R.id.filter_incomplete) {
+                filterMode = FilterMode.INCOMPLETE;
+                menuItem.setChecked(true);
+                fetchAndDisplayWeekSchedule();
+                return true;
+            } else if (itemId == R.id.filter_complete) {
+                filterMode = FilterMode.COMPLETE;
+                menuItem.setChecked(true);
+                fetchAndDisplayWeekSchedule();
+                return true;
+            } else if (itemId == R.id.filter_as_list) {
+                filterMode = FilterMode.ALL;
+                menuItem.setChecked(true);
+                fetchAndDisplayWeekSchedule();
+                return true;
+>>>>>>> b4251b2 (complete nhận lịch trình từ bạn bè, chia sẻ sẻ lịch trình cho bạn bè, lọc)
             }
             applyCurrentFilter();
             return true;
         });
+<<<<<<< HEAD
 
+=======
+>>>>>>> b4251b2 (complete nhận lịch trình từ bạn bè, chia sẻ sẻ lịch trình cho bạn bè, lọc)
         popup.show();
+    }
+
+    // Thêm hàm lọc
+    private List<Task> filterTasks(List<Task> allTasks) {
+        Date now = new Date();
+        switch (filterMode) {
+            case OVERDUE:
+                return allTasks.stream()
+                    .filter(task -> !task.isCompleted() && getTaskEndDateTime(task).before(now))
+                    .collect(java.util.stream.Collectors.toList());
+            case INCOMPLETE:
+                return allTasks.stream()
+                    .filter(task -> !task.isCompleted())
+                    .collect(java.util.stream.Collectors.toList());
+            case COMPLETE:
+                return allTasks.stream()
+                    .filter(Task::isCompleted)
+                    .collect(java.util.stream.Collectors.toList());
+            default:
+                return allTasks;
+        }
+    }
+
+    // Thêm hàm getTaskEndDateTime nếu chưa có
+    private Date getTaskEndDateTime(Task task) {
+        try {
+            String dateTimeString = task.getDate().replace("Ngày ", "") + " " + task.getEndTime();
+            java.text.SimpleDateFormat combinedFormat = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault());
+            return combinedFormat.parse(dateTimeString);
+        } catch (Exception e) {
+            return new Date(0);
+        }
     }
 }
