@@ -54,9 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private FilterMode currentFilter = FilterMode.DEFAULT_WEEK;
     private List<Task> allTasksCache = new ArrayList<>();
 
+    // Định dạng ngày mà bạn lưu trên Firebase
     private final SimpleDateFormat firebaseDateFormat = new SimpleDateFormat("'Ngày' dd/MM/yyyy", Locale.getDefault());
+    // Định dạng để hiển thị Thứ trong tuần
     private final SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEEE", new Locale("vi", "VN"));
+    // Định dạng để hiển thị ngày/tháng
     private final SimpleDateFormat dateMonthFormat = new SimpleDateFormat("d 'tháng' M", new Locale("vi", "VN"));
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +69,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         displayList = new ArrayList<>();
         scheduleAdapter = new ScheduleAdapter(displayList, getSupportFragmentManager());
         recyclerView.setAdapter(scheduleAdapter);
@@ -93,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 applyCurrentFilter();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(MainActivity.this, "Lỗi tải dữ liệu", Toast.LENGTH_SHORT).show();
@@ -237,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     private void buildDisplayListForWeek(List<Date> weekDays, Map<String, List<Task>> tasksByDate) {
         displayList.clear();
         for (Date day : weekDays) {
+            // Tạo chuỗi header cho ngày
             String dayHeader = dayOfWeekFormat.format(day) + ", " + dateMonthFormat.format(day);
             displayList.add(dayHeader);
 
@@ -244,11 +253,17 @@ public class MainActivity extends AppCompatActivity {
             List<Task> tasksForDay = tasksByDate.get(dateKey);
 
             if (tasksForDay != null && !tasksForDay.isEmpty()) {
+                // Nếu có task, thêm chúng vào danh sách hiển thị
                 displayList.addAll(tasksForDay);
             }
+            // Nếu không có task, không cần làm gì thêm, chỉ có header ngày được hiển thị.
         }
     }
 
+
+    /**
+     * Tạo ra một danh sách 7 đối tượng Date, bắt đầu từ hôm nay.
+     */
     private List<Date> getNextSevenDays() {
         List<Date> dates = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -258,29 +273,41 @@ public class MainActivity extends AppCompatActivity {
         }
         return dates;
     }
+    // --- PHẦN BỊ THIẾU ĐÃ ĐƯỢC THÊM LẠI Ở ĐÂY ---
 
-    // --- CÁC HÀM MENU (KHÔNG THAY ĐỔI) ---
+    /**
+     * Phương thức này được gọi để tạo các icon bên phải trên Toolbar.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    /**
+     * Phương thức này xử lý sự kiện click trên tất cả các icon của Toolbar.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+
         if (id == android.R.id.home) {
+            // Xử lý click cho icon menu bên trái (mở Settings)
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
+
         } else if (id == R.id.action_history) {
             showFilterPopupMenu();
             return true;
+
         } else if (id == R.id.action_add) {
+            // Xử lý click cho icon thêm bên phải (mở AddTask)
             Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
             startActivity(intent);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Nhóm các bộ lọc trạng thái. Chỉ một mục được chọn tại một thời điểm. -->
+    <!--
+        Nhóm này có hành vi giống như RadioGroup,
+        chỉ một item có thể được chọn tại một thời điểm.
+    -->
     <group
         android:id="@+id/filter_group_status"
         android:checkableBehavior="single">
@@ -16,10 +20,13 @@
             android:title="Hoàn tất" />
     </group>
 
-    <!-- Một mục riêng biệt để quay về chế độ xem danh sách mặc định -->
+    <!--
+        Mục này là một lựa chọn riêng biệt, có thể được tick hoặc không.
+        Chúng ta sẽ tự quản lý việc hiển thị icon dấu tick bằng code.
+    -->
     <item
         android:id="@+id/filter_as_list"
         android:title="Danh sách"
-        android:checkable="true" />
-
+        android:checkable="true"
+        android:checked="true" />
 </menu>
