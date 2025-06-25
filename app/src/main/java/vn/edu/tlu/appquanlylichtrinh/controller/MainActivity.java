@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
+import androidx.appcompat.widget.PopupMenu;
 import vn.edu.tlu.appquanlylichtrinh.R;
 import vn.edu.tlu.appquanlylichtrinh.model.Task;
 import vn.edu.tlu.appquanlylichtrinh.controller.ScheduleAdapter;
@@ -190,9 +191,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
 
         } else if (id == R.id.action_history) {
-            // Xử lý click cho icon lịch sử bên phải
-            Toast.makeText(this, "Lịch sử đã được nhấn", Toast.LENGTH_SHORT).show();
-            // TODO: Code xử lý khi nhấn nút lịch sử
+            // Khi nhấn nút lịch sử, gọi hàm hiển thị popup menu
+            showFilterPopupMenu();
             return true;
 
         } else if (id == R.id.action_add) {
@@ -203,5 +203,72 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+
+
+    }
+    /**
+     * Hàm để hiển thị PopupMenu khi nhấn vào icon lịch sử.
+     */
+    private void showFilterPopupMenu() {
+        // Tìm View của icon lịch sử để PopupMenu hiện ra đúng vị trí
+        View menuItemView = findViewById(R.id.action_history);
+        if (menuItemView == null) {
+            // Dự phòng nếu không tìm thấy view (ví dụ trên các thiết bị cũ)
+            // Lấy view của toolbar làm vị trí neo
+            menuItemView = findViewById(R.id.toolbar);
+        }
+
+        PopupMenu popup = new PopupMenu(this, menuItemView);
+        // "Thổi phồng" file menu của chúng ta vào popup
+        popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
+
+        // --- Logic để hiển thị dấu tick ---
+        // Lấy mục menu "Danh sách"
+        MenuItem listMenuItem = popup.getMenu().findItem(R.id.filter_as_list);
+        // Đặt icon dấu tick nếu nó đang được chọn
+        if (listMenuItem.isChecked()) {
+            listMenuItem.setIcon(R.drawable.ic_check_24);
+        } else {
+            listMenuItem.setIcon(null);
+        }
+
+        // Đặt sự kiện lắng nghe khi một mục trong popup được chọn
+        popup.setOnMenuItemClickListener(menuItem -> {
+            int itemId = menuItem.getItemId();
+
+            if (itemId == R.id.filter_overdue || itemId == R.id.filter_incomplete || itemId == R.id.filter_complete) {
+                // Xử lý cho nhóm radio button
+                menuItem.setChecked(true); // Đánh dấu mục được chọn
+                Toast.makeText(this, "Đã chọn: " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                // TODO: Thêm logic lọc danh sách ở đây
+                return true;
+            } else if (itemId == R.id.filter_as_list) {
+                // Xử lý cho mục "Danh sách"
+                menuItem.setChecked(!menuItem.isChecked()); // Đảo trạng thái tick
+                if (menuItem.isChecked()) {
+                    menuItem.setIcon(R.drawable.ic_check_24);
+                } else {
+                    menuItem.setIcon(null);
+                }
+                // Giữ cho popup không bị đóng lại ngay lập tức để người dùng thấy sự thay đổi
+                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+                menuItem.setActionView(new View(getApplicationContext()));
+                menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        return false;
+                    }
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        return false;
+                    }
+                });
+                return false; // Trả về false để menu không đóng lại
+            }
+            return false;
+        });
+
+        // Hiển thị popup menu
+        popup.show();
     }
 }
