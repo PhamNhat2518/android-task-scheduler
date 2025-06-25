@@ -34,32 +34,11 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
-    <!-- Phần nội dung công việc (nền trắng) -->
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/inner_tasks_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp">
+        android:nestedScrollingEnabled="false"/>
 
-        <TextView
-            android:id="@+id/tvTaskDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Không có công việc nào"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"/>
-
-        <ImageView
-            android:id="@+id/ivAddTask"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_add_purple"
-            android:contentDescription="Thêm công việc"/>
-        <!-- Lưu ý: cần có file ic_add_purple.xml -->
-    </RelativeLayout>
 </LinearLayout>
+    <!-- File: res/layout/list_item_schedule_day.xml -->

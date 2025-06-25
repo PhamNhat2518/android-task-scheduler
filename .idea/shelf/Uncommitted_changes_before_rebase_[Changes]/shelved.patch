@@ -1,0 +1,95 @@
+Index: app/src/main/res/layout/list_item_schedule_day.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:orientation=\"vertical\">\r\n\r\n    <!-- Phần tiêu đề ngày (nền xám) -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@color/colorBackgroundLightGrey\"\r\n        android:paddingHorizontal=\"16dp\"\r\n        android:paddingVertical=\"8dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvDayOfWeek\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:text=\"Thứ 2\"\r\n            android:textColor=\"@color/colorTextDarkGrey\"\r\n            android:textStyle=\"bold\"\r\n            android:textSize=\"16sp\"/>\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvDate\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"1 tháng 6\"\r\n            android:textColor=\"@color/colorTextDarkGrey\"\r\n            android:textSize=\"14sp\"/>\r\n    </LinearLayout>\r\n\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@color/white\"\r\n        android:paddingHorizontal=\"16dp\"\r\n        android:paddingVertical=\"20dp\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvTaskDescription\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_alignParentStart=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:text=\"Không có công việc nào\"\r\n            android:textColor=\"@android:color/darker_gray\"\r\n            android:textSize=\"16sp\"/>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/ivAddTask\"\r\n            android:layout_width=\"32dp\"\r\n            android:layout_height=\"32dp\"\r\n            android:layout_alignParentEnd=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:src=\"@drawable/ic_add_purple\"\r\n            android:contentDescription=\"Thêm công việc\"/>\r\n\r\n    </RelativeLayout>\r\n</LinearLayout>\r\n    <!-- File: res/layout/list_item_schedule_day.xml -->\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\nxmlns:tools=\"http://schemas.android.com/tools\"\r\nandroid:layout_width=\"match_parent\"\r\nandroid:layout_height=\"wrap_content\"\r\nandroid:orientation=\"vertical\"\r\nandroid:padding=\"16dp\">\r\n\r\n\r\n<TextView\r\n    android:id=\"@+id/day_header_text\"\r\n    android:layout_width=\"wrap_content\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:text=\"Hôm nay, 25 tháng 6\"\r\n    android:textSize=\"20sp\"\r\n    android:textStyle=\"bold\"\r\n    android:textColor=\"@android:color/black\"\r\n    android:layout_marginBottom=\"8dp\"/>\r\n\r\n\r\n<androidx.recyclerview.widget.RecyclerView\r\n    android:id=\"@+id/inner_tasks_recycler_view\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    tools:listitem=\"@layout/list_item_task\" />\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/list_item_schedule_day.xml b/app/src/main/res/layout/list_item_schedule_day.xml
+--- a/app/src/main/res/layout/list_item_schedule_day.xml	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/app/src/main/res/layout/list_item_schedule_day.xml	(date 1750861829521)
+@@ -62,31 +62,4 @@
+             android:contentDescription="Thêm công việc"/>
+ 
+     </RelativeLayout>
+-</LinearLayout>
+-    <!-- File: res/layout/list_item_schedule_day.xml -->
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-xmlns:tools="http://schemas.android.com/tools"
+-android:layout_width="match_parent"
+-android:layout_height="wrap_content"
+-android:orientation="vertical"
+-android:padding="16dp">
+-
+-
+-<TextView
+-    android:id="@+id/day_header_text"
+-    android:layout_width="wrap_content"
+-    android:layout_height="wrap_content"
+-    android:text="Hôm nay, 25 tháng 6"
+-    android:textSize="20sp"
+-    android:textStyle="bold"
+-    android:textColor="@android:color/black"
+-    android:layout_marginBottom="8dp"/>
+-
+-
+-<androidx.recyclerview.widget.RecyclerView
+-    android:id="@+id/inner_tasks_recycler_view"
+-    android:layout_width="match_parent"
+-    android:layout_height="wrap_content"
+-    tools:listitem="@layout/list_item_task" />
+-
+ </LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/drawable/task_checkbox_background.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<selector xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <!-- Trạng thái khi được check (hoàn thành) -->\r\n    <item android:state_checked=\"true\">\r\n        <layer-list>\r\n            <!-- Lớp 1: Vòng tròn nền màu chính -->\r\n            <item>\r\n                <shape android:shape=\"oval\">\r\n                    <solid android:color=\"@color/colorPrimary\"/>\r\n                    <size android:width=\"28dp\" android:height=\"28dp\"/>\r\n                </shape>\r\n            </item>\r\n\r\n            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa - ĐÃ THÊM KÍCH THƯỚC -->\r\n            <item\r\n                android:drawable=\"@drawable/ic_check_white_24\"\r\n                android:gravity=\"center\"\r\n                android:width=\"24dp\"\r\n                android:height=\"24dp\" />\r\n\r\n        </layer-list>\r\n    </item>\r\n\r\n    <!-- Trạng thái mặc định (chưa hoàn thành) -->\r\n    <item>\r\n        <shape android:shape=\"oval\">\r\n            <solid android:color=\"@android:color/transparent\"/>\r\n            <stroke android:width=\"1.5dp\" android:color=\"#BDBDBD\"/>\r\n            <size android:width=\"28dp\" android:height=\"28dp\"/>\r\n        </shape>\r\n    </item>\r\n</selector>\r\n<selector xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n<!-- Trạng thái khi được tick (checked) -->\r\n<item android:state_checked=\"true\">\r\n    <shape android:shape=\"oval\">\r\n        <solid android:color=\"?attr/colorPrimary\" /> <!-- Lấy màu chính của app -->\r\n        <size android:width=\"24dp\" android:height=\"24dp\" />\r\n    </shape>\r\n</item>\r\n<!-- Trạng thái mặc định (chưa tick) -->\r\n<item android:state_checked=\"false\">\r\n    <shape android:shape=\"oval\">\r\n        <solid android:color=\"@android:color/transparent\" />\r\n        <stroke android:width=\"2dp\" android:color=\"#BDBDBD\" /> <!-- Viền màu xám -->\r\n        <size android:width=\"24dp\" android:height=\"24dp\" />\r\n    </shape>\r\n</item>\r\n</selector>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/task_checkbox_background.xml b/app/src/main/res/drawable/task_checkbox_background.xml
+--- a/app/src/main/res/drawable/task_checkbox_background.xml	(revision df848e6e3f59631c4aab8fed4939c232724937c3)
++++ b/app/src/main/res/drawable/task_checkbox_background.xml	(date 1750861829528)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <selector xmlns:android="http://schemas.android.com/apk/res/android">
++
+     <!-- Trạng thái khi được check (hoàn thành) -->
+     <item android:state_checked="true">
+         <layer-list>
+@@ -11,7 +12,7 @@
+                 </shape>
+             </item>
+ 
+-            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa - ĐÃ THÊM KÍCH THƯỚC -->
++            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa -->
+             <item
+                 android:drawable="@drawable/ic_check_white_24"
+                 android:gravity="center"
+@@ -29,21 +30,6 @@
+             <size android:width="28dp" android:height="28dp"/>
+         </shape>
+     </item>
++
+ </selector>
+-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+-<!-- Trạng thái khi được tick (checked) -->
+-<item android:state_checked="true">
+-    <shape android:shape="oval">
+-        <solid android:color="?attr/colorPrimary" /> <!-- Lấy màu chính của app -->
+-        <size android:width="24dp" android:height="24dp" />
+-    </shape>
+-</item>
+-<!-- Trạng thái mặc định (chưa tick) -->
+-<item android:state_checked="false">
+-    <shape android:shape="oval">
+-        <solid android:color="@android:color/transparent" />
+-        <stroke android:width="2dp" android:color="#BDBDBD" /> <!-- Viền màu xám -->
+-        <size android:width="24dp" android:height="24dp" />
+-    </shape>
+-</item>
+-</selector>
+\ No newline at end of file
++    <!-- MỌI THỨ SAU DÒNG NÀY ĐÃ ĐƯỢC XÓA BỎ -->
+\ No newline at end of file

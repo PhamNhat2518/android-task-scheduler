@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+
     <!-- Trạng thái khi được check (hoàn thành) -->
     <item android:state_checked="true">
         <layer-list>
@@ -11,7 +12,7 @@
                 </shape>
             </item>
 
-            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa - ĐÃ THÊM KÍCH THƯỚC -->
+            <!-- Lớp 2: Icon dấu tick màu trắng ở giữa -->
             <item
                 android:drawable="@drawable/ic_check_white_24"
                 android:gravity="center"
@@ -29,4 +30,6 @@
             <size android:width="28dp" android:height="28dp"/>
         </shape>
     </item>
+
 </selector>
+    <!-- MỌI THỨ SAU DÒNG NÀY ĐÃ ĐƯỢC XÓA BỎ -->
