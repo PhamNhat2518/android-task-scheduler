@@ -21,6 +21,7 @@ import java.util.List;
 import vn.edu.tlu.appquanlylichtrinh.model.Task;
 
 import vn.edu.tlu.appquanlylichtrinh.R;
+import android.content.Context;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -179,35 +180,40 @@ public class SettingsActivity extends AppCompatActivity {
                         taskTitles[i] = validTasks.get(i).getTitle();
                         checkedItems[i] = false;
                     }
-                    new android.app.AlertDialog.Builder(getActivity())
+                    android.app.AlertDialog shareDialog = new android.app.AlertDialog.Builder(getActivity())
                             .setTitle("Chọn nhiệm vụ để chia sẻ")
                             .setMultiChoiceItems(taskTitles, checkedItems, (dialog, which, isChecked) -> {
                                 checkedItems[which] = isChecked;
                             })
-                            .setPositiveButton("Tạo mã chia sẻ", (dialog, which) -> {
-                                java.util.List<Task> selected = new java.util.ArrayList<>();
-                                for (int i = 0; i < checkedItems.length; i++) {
-                                    if (checkedItems[i]) selected.add(validTasks.get(i));
-                                }
-                                if (selected.isEmpty()) {
-                                    android.widget.Toast.makeText(getActivity(), "Chọn ít nhất 1 nhiệm vụ!", android.widget.Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // Sinh mã chia sẻ và lưu lên Firebase
-                                    String shareCode = "SHARE" + (int)(Math.random()*100000);
-                                    com.google.firebase.database.DatabaseReference sharedRef = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("shared_schedules").child(shareCode);
-                                    for (Task t : selected) {
-                                        String newId = sharedRef.push().getKey();
-                                        if (newId != null) sharedRef.child(newId).setValue(t);
-                                    }
-                                    new android.app.AlertDialog.Builder(getActivity())
+                            .setPositiveButton("Tạo mã chia sẻ", null)
+                            .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                            .create();
+                    shareDialog.setOnShowListener(d -> {
+                        android.widget.Button btn = shareDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                        btn.setOnClickListener(v -> {
+                            java.util.List<Task> selected = new java.util.ArrayList<>();
+                            for (int i = 0; i < checkedItems.length; i++) {
+                                if (checkedItems[i]) selected.add(validTasks.get(i));
+                            }
+                            if (selected.isEmpty()) {
+                                android.widget.Toast.makeText(getActivity(), "Chọn ít nhất 1 nhiệm vụ!", android.widget.Toast.LENGTH_SHORT).show();
+                            } else {
+                                String shareCode = "SHARE" + (int)(Math.random()*100000);
+                                com.google.firebase.database.DatabaseReference sharedRef = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("shared_schedules").child(shareCode);
+                                saveTasksRecursively(sharedRef, selected, 0, () -> {
+                                    android.app.Activity activity = getActivity();
+                                    if (activity != null && !activity.isFinishing()) {
+                                        new android.app.AlertDialog.Builder(activity)
                                             .setTitle("Mã chia sẻ")
                                             .setMessage("Gửi mã này cho bạn bè: " + shareCode + "\n(Số nhiệm vụ: " + selected.size() + ")")
-                                            .setPositiveButton("OK", null)
+                                            .setPositiveButton("OK", (d2, w2) -> shareDialog.dismiss())
                                             .show();
-                                }
-                            })
-                            .setNegativeButton("Hủy", null)
-                            .show();
+                                    }
+                                });
+                            }
+                        });
+                    });
+                    shareDialog.show();
                 }
                 @Override
                 public void onCancelled(@androidx.annotation.NonNull com.google.firebase.database.DatabaseError error) {
@@ -221,6 +227,21 @@ public class SettingsActivity extends AppCompatActivity {
             });
             // Trả về dialog loading ban đầu (sẽ bị dismiss khi có dữ liệu)
             return loadingDialog;
+        }
+
+        private void saveTasksRecursively(com.google.firebase.database.DatabaseReference ref, java.util.List<Task> tasks, int index, Runnable onComplete) {
+            if (index >= tasks.size()) {
+                onComplete.run();
+                return;
+            }
+            String newId = ref.push().getKey();
+            if (newId != null) {
+                ref.child(newId).setValue(tasks.get(index)).addOnCompleteListener(task -> {
+                    saveTasksRecursively(ref, tasks, index + 1, onComplete);
+                });
+            } else {
+                saveTasksRecursively(ref, tasks, index + 1, onComplete);
+            }
         }
     }
 
